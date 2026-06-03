@@ -1,4 +1,2128 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Operations Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f1117;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1f2e 0%, #16213e 50%, #0f3460 100%);
+            padding: 20px 30px;
+            border-bottom: 1px solid #2d3748;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f1f5f9;
+            letter-spacing: 0.5px;
+        }
+
+        .header p {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .last-updated {
+            font-size: 11px;
+            color: #64748b;
+            text-align: right;
+        }
+
+        .live-badge {
+            background: #10b981;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            background: #1a1f2e;
+            padding: 0 30px;
+            display: flex;
+            gap: 4px;
+            border-bottom: 1px solid #2d3748;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 14px 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .nav-tab:hover {
+            color: #94a3b8;
+            background: rgba(255,255,255,0.03);
+        }
+
+        .nav-tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+            background: rgba(59,130,246,0.05);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 24px 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: linear-gradient(135deg, #1e2433, #1a1f2e);
+            border: 1px solid #2d3748;
+            border-radius: 14px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 14px 14px 0 0;
+        }
+
+        .kpi-card.blue::before { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+        .kpi-card.green::before { background: linear-gradient(90deg, #10b981, #059669); }
+        .kpi-card.yellow::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+        .kpi-card.red::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .kpi-card.purple::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+        .kpi-card.cyan::before { background: linear-gradient(90deg, #06b6d4, #0891b2); }
+        .kpi-card.orange::before { background: linear-gradient(90deg, #f97316, #ea580c); }
+
+        .kpi-label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .kpi-value {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .kpi-card.blue .kpi-value { color: #60a5fa; }
+        .kpi-card.green .kpi-value { color: #34d399; }
+        .kpi-card.yellow .kpi-value { color: #fbbf24; }
+        .kpi-card.red .kpi-value { color: #f87171; }
+        .kpi-card.purple .kpi-value { color: #a78bfa; }
+        .kpi-card.cyan .kpi-value { color: #22d3ee; }
+        .kpi-card.orange .kpi-value { color: #fb923c; }
+
+        .kpi-sub {
+            font-size: 11px;
+            color: #475569;
+        }
+
+        .kpi-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 32px;
+            opacity: 0.12;
+        }
+
+        .kpi-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 4px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .kpi-change.up { color: #34d399; background: rgba(52,211,153,0.1); }
+        .kpi-change.down { color: #f87171; background: rgba(248,113,113,0.1); }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .charts-row {
+            display: grid;
+            gap: 20px;
+        }
+
+        .charts-row.cols-2 { grid-template-columns: 1fr 1fr; }
+        .charts-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .charts-row.cols-1-2 { grid-template-columns: 1fr 2fr; }
+        .charts-row.cols-2-1 { grid-template-columns: 2fr 1fr; }
+
+        .chart-card {
+            background: linear-gradient(135deg, #1e2433, #1a1f2e);
+            border: 1px solid #2d3748;
+            border-radius: 14px;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .chart-subtitle {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
+        .chart-badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-blue { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+        .badge-green { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+        .badge-yellow { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+        .badge-red { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+        .badge-purple { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3); }
+
+        .chart-container {
+            position: relative;
+        }
+
+        /* Progress Bars */
+        .progress-section {
+            padding: 6px 0;
+        }
+
+        .progress-item {
+            margin-bottom: 14px;
+        }
+
+        .progress-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .progress-values {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .progress-bar-track {
+            height: 8px;
+            background: #2d3748;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        /* Task Table */
+        .task-table-wrapper {
+            overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid #2d3748;
+        }
+
+        .task-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .task-table th {
+            background: #1a1f2e;
+            color: #64748b;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.8px;
+            border-bottom: 1px solid #2d3748;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .task-table th:hover {
+            color: #94a3b8;
+        }
+
+        .task-table td {
+            padding: 11px 16px;
+            border-bottom: 1px solid #1e2433;
+            color: #cbd5e1;
+            vertical-align: middle;
+        }
+
+        .task-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .task-table tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        /* Status Pills */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-completed { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+        .status-in-progress { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+        .status-not-started { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.25); }
+
+        .status-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .dot-completed { background: #34d399; }
+        .dot-in-progress { background: #60a5fa; }
+        .dot-not-started { background: #94a3b8; }
+
+        /* Priority Pills */
+        .priority-pill {
+            display: inline-flex;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .p-urgent { background: rgba(239,68,68,0.15); color: #f87171; }
+        .p-important { background: rgba(245,158,11,0.15); color: #fbbf24; }
+        .p-medium { background: rgba(59,130,246,0.15); color: #60a5fa; }
+        .p-low { background: rgba(100,116,139,0.15); color: #94a3b8; }
+
+        /* Label Pills */
+        .label-pill {
+            display: inline-flex;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .l-short { background: rgba(16,185,129,0.12); color: #6ee7b7; }
+        .l-medium { background: rgba(245,158,11,0.12); color: #fcd34d; }
+        .l-long { background: rgba(139,92,246,0.12); color: #c4b5fd; }
+        .l-hold { background: rgba(100,116,139,0.12); color: #94a3b8; }
+
+        /* Checklist Progress */
+        .checklist-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checklist-bar {
+            flex: 1;
+            height: 4px;
+            background: #2d3748;
+            border-radius: 2px;
+            overflow: hidden;
+            min-width: 50px;
+        }
+
+        .checklist-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            border-radius: 2px;
+        }
+
+        .checklist-text {
+            font-size: 10px;
+            color: #64748b;
+            white-space: nowrap;
+        }
+
+        /* Filters */
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .filter-select {
+            background: #1e2433;
+            border: 1px solid #2d3748;
+            color: #94a3b8;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .filter-select:hover, .filter-select:focus {
+            border-color: #3b82f6;
+            color: #e2e8f0;
+        }
+
+        .filter-search {
+            background: #1e2433;
+            border: 1px solid #2d3748;
+            color: #94a3b8;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            outline: none;
+            width: 200px;
+            transition: border-color 0.2s;
+        }
+
+        .filter-search:focus {
+            border-color: #3b82f6;
+            color: #e2e8f0;
+        }
+
+        .filter-search::placeholder {
+            color: #475569;
+        }
+
+        /* Timeline */
+        .timeline-item {
+            display: flex;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid #1e2433;
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .timeline-meta {
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
+        /* Bucket Summary Cards */
+        .bucket-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .bucket-card {
+            background: linear-gradient(135deg, #1e2433, #1a1f2e);
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .bucket-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bucket-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .bucket-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .bucket-stat {
+            text-align: center;
+        }
+
+        .bucket-stat-val {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .bucket-stat-lbl {
+            font-size: 9px;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bucket-progress {
+            height: 5px;
+            background: #2d3748;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .bucket-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        /* Assignee Cards */
+        .assignee-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .assignee-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            border: 1px solid #2d3748;
+        }
+
+        .assignee-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .assignee-info {
+            flex: 1;
+        }
+
+        .assignee-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .assignee-tasks {
+            font-size: 10px;
+            color: #64748b;
+        }
+
+        .assignee-bar-wrap {
+            width: 80px;
+        }
+
+        .assignee-bar {
+            height: 4px;
+            background: #2d3748;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 3px;
+        }
+
+        .assignee-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+        }
+
+        .assignee-pct {
+            font-size: 10px;
+            color: #64748b;
+            text-align: right;
+        }
+
+        /* Due Soon / Overdue */
+        .alert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border-left: 3px solid;
+        }
+
+        .alert-item.overdue {
+            background: rgba(239,68,68,0.06);
+            border-left-color: #ef4444;
+        }
+
+        .alert-item.due-soon {
+            background: rgba(245,158,11,0.06);
+            border-left-color: #f59e0b;
+        }
+
+        .alert-item.upcoming {
+            background: rgba(59,130,246,0.06);
+            border-left-color: #3b82f6;
+        }
+
+        .alert-task {
+            flex: 1;
+        }
+
+        .alert-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .alert-meta {
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .alert-date {
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .alert-item.overdue .alert-date { color: #f87171; }
+        .alert-item.due-soon .alert-date { color: #fbbf24; }
+        .alert-item.upcoming .alert-date { color: #60a5fa; }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .charts-row.cols-3 { grid-template-columns: 1fr 1fr; }
+            .charts-row.cols-1-2 { grid-template-columns: 1fr; }
+            .charts-row.cols-2-1 { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 900px) {
+            .charts-row.cols-2 { grid-template-columns: 1fr; }
+            .charts-row.cols-3 { grid-template-columns: 1fr; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .main-content { padding: 16px; }
+            .header { padding: 14px 16px; }
+            .nav-tabs { padding: 0 16px; }
+        }
+
+        @media (max-width: 600px) {
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+            .header h1 { font-size: 16px; }
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1e2433;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #475569;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <div class="header-left">
+        <div class="header-icon">🏭</div>
+        <div>
+            <h1>Warehouse Operations Dashboard</h1>
+            <p>Project & Task Management Overview — Wodgina Site</p>
+        </div>
+    </div>
+    <div class="header-right">
+        <div class="last-updated">
+            <div>Last Updated</div>
+            <div style="color:#94a3b8; font-weight:600;">May 2026</div>
+        </div>
+        <span class="live-badge">● LIVE</span>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav-tabs">
+    <div class="nav-tab active" onclick="switchTab('overview')">📊 Overview</div>
+    <div class="nav-tab" onclick="switchTab('status')">📋 Status & Progress</div>
+    <div class="nav-tab" onclick="switchTab('buckets')">🗂 Buckets</div>
+    <div class="nav-tab" onclick="switchTab('team')">👥 Team</div>
+    <div class="nav-tab" onclick="switchTab('timeline')">📅 Timeline & Due Dates</div>
+    <div class="nav-tab" onclick="switchTab('tasks')">📝 Task List</div>
+</div>
+
+<!-- OVERVIEW TAB -->
+<div id="tab-overview" class="tab-content active">
+    <div class="main-content">
+
+        <!-- KPI Row -->
+        <div class="kpi-grid">
+            <div class="kpi-card blue">
+                <div class="kpi-label">Total Tasks</div>
+                <div class="kpi-value">64</div>
+                <div class="kpi-sub">Across all buckets</div>
+                <div class="kpi-icon">📋</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-label">Completed</div>
+                <div class="kpi-value">20</div>
+                <div class="kpi-sub">31.3% completion rate</div>
+                <span class="kpi-change up">▲ 20 done</span>
+                <div class="kpi-icon">✅</div>
+            </div>
+            <div class="kpi-card yellow">
+                <div class="kpi-label">In Progress</div>
+                <div class="kpi-value">33</div>
+                <div class="kpi-sub">51.6% of all tasks</div>
+                <div class="kpi-icon">🔄</div>
+            </div>
+            <div class="kpi-card red">
+                <div class="kpi-label">Not Started</div>
+                <div class="kpi-value">11</div>
+                <div class="kpi-sub">17.2% backlog</div>
+                <div class="kpi-icon">⏸</div>
+            </div>
+            <div class="kpi-card purple">
+                <div class="kpi-label">Urgent Priority</div>
+                <div class="kpi-value">7</div>
+                <div class="kpi-sub">Requiring attention</div>
+                <div class="kpi-icon">🚨</div>
+            </div>
+            <div class="kpi-card cyan">
+                <div class="kpi-label">Buckets</div>
+                <div class="kpi-value">7</div>
+                <div class="kpi-sub">Active categories</div>
+                <div class="kpi-icon">🗂</div>
+            </div>
+            <div class="kpi-card orange">
+                <div class="kpi-label">Checklist Items</div>
+                <div class="kpi-value">79</div>
+                <div class="kpi-sub">Across all tasks</div>
+                <div class="kpi-icon">☑️</div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="charts-row cols-2" style="margin-bottom:20px;">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Task Status Distribution</div>
+                        <div class="chart-subtitle">Overall completion breakdown</div>
+                    </div>
+                    <span class="chart-badge badge-green">64 tasks</span>
+                </div>
+                <div class="chart-container" style="height:280px;">
+                    <canvas id="statusDoughnut"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Tasks by Bucket</div>
+                        <div class="chart-subtitle">Distribution across categories</div>
+                    </div>
+                    <span class="chart-badge badge-blue">7 buckets</span>
+                </div>
+                <div class="chart-container" style="height:280px;">
+                    <canvas id="bucketBar"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="charts-row cols-2" style="margin-bottom:20px;">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Priority Breakdown</div>
+                        <div class="chart-subtitle">Tasks by urgency level</div>
+                    </div>
+                    <span class="chart-badge badge-red">Urgent: 7</span>
+                </div>
+                <div class="chart-container" style="height:260px;">
+                    <canvas id="priorityBar"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Timeline Labels</div>
+                        <div class="chart-subtitle">Tasks by delivery timeframe</div>
+                    </div>
+                    <span class="chart-badge badge-purple">4 horizons</span>
+                </div>
+                <div class="chart-container" style="height:260px;">
+                    <canvas id="labelPie"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 3 -->
+        <div class="charts-row cols-1" style="margin-bottom:20px;">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Task Creation Timeline</div>
+                        <div class="chart-subtitle">Cumulative tasks created over time</div>
+                    </div>
+                    <span class="chart-badge badge-blue">2025 – 2026</span>
+                </div>
+                <div class="chart-container" style="height:220px;">
+                    <canvas id="creationLine"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bucket Progress + Recent Completions -->
+        <div class="charts-row cols-2">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Bucket Completion Rate</div>
+                        <div class="chart-subtitle">% completed per category</div>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-item">
+                        <div class="progress-label-row">
+                            <span class="progress-label">Warehouse Infrastructure</span>
+                            <span class="progress-values">4 / 14 — 29%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:29%; background: linear-gradient(90deg,#3b82f6,#1d4ed8);"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label-row">
+                            <span class="progress-label">Communication & Governance</span>
+                            <span class="progress-values">8 / 18 — 44%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:44%; background: linear-gradient(90deg,#10b981,#059669);"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label-row">
+                            <span class="progress-label">Workforce Capability</span>
+                            <span class="progress-values">4 / 8 — 50%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:50%; background: linear-gradient(90deg,#8b5cf6,#7c3aed);"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label-row">
+                            <span class="progress-label">Inventory & Materials</span>
+                            <span class="progress-values">2 / 10 — 20%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:20%; background: linear-gradient(90deg,#f59e0b,#d97706);"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label-row">
+                            <span class="progress-label">Operational Planning</span>
+                            <span class="progress-values">3 / 8 — 38%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:38%; background: linear-gradient(90deg,#f97316,#ea580c);"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label-row">
+                            <span class="progress-label">Performance Measurement</span>
+                            <span class="progress-values">1 / 5 — 20%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:20%; background: linear-gradient(90deg,#06b6d4,#0891b2);"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label-row">
+                            <span class="progress-label">Stakeholder Engagement</span>
+                            <span class="progress-values">0 / 4 — 0%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:0%; background: linear-gradient(90deg,#ec4899,#db2777);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Recent Completions</div>
+                        <div class="chart-subtitle">Latest tasks marked done</div>
+                    </div>
+                    <span class="chart-badge badge-green">20 total</span>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#10b981;"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Chem Alert</div>
+                        <div class="timeline-meta">Completed 24 May 2026 · Benjamin Chao · Inventory & Materials</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#10b981;"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">F2F WH Collab Meetings</div>
+                        <div class="timeline-meta">Completed 24 May 2026 · Steve Valentine · Operational Planning</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#10b981;"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Single Point Of Contacts</div>
+                        <div class="timeline-meta">Completed 24 May 2026 · Steve Valentine · Comm & Governance</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#10b981;"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Freight Rate Card Visibility</div>
+                        <div class="timeline-meta">Completed 24 May 2026 · Steve Valentine · Comm & Governance</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#10b981;"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Freight Cut Off Times</div>
+                        <div class="timeline-meta">Completed 24 May 2026 · Steve Valentine · Comm & Governance</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#3b82f6;"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Talent Management</div>
+                        <div class="timeline-meta">Completed 24 May 2026 · Steve Valentine · Workforce Capability</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#3b82f6;"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Task Allocation</div>
+                        <div class="timeline-meta">Completed 24 May 2026 · Steve Valentine · Operational Planning</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#8b5cf6;"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Survey Results</div>
+                        <div class="timeline-meta">Completed 24 May 2026 · Steve Valentine · Workforce Capability</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- STATUS TAB -->
+<div id="tab-status" class="tab-content">
+    <div class="main-content">
+        <div class="charts-row cols-3" style="margin-bottom:20px;">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Status by Bucket</div>
+                        <div class="chart-subtitle">Stacked completion view</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height:320px;">
+                    <canvas id="statusByBucketStacked"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Priority vs Status</div>
+                        <div class="chart-subtitle">Heat map view</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height:320px;">
+                    <canvas id="priorityStatusGrouped"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Completion Trend</div>
+                        <div class="chart-subtitle">Tasks completed by month</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height:320px;">
+                    <canvas id="completionTrend"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-row cols-2" style="margin-bottom:20px;">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Checklist Completion</div>
+                        <div class="chart-subtitle">Items completed vs total per task</div>
+                    </div>
+                    <span class="chart-badge badge-blue">Active tasks</span>
+                </div>
+                <div class="chart-container" style="height:300px;">
+                    <canvas id="checklistChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Open Tasks Age</div>
+                        <div class="chart-subtitle">Days since creation for open tasks</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height:300px;">
+                    <canvas id="openTaskAge"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Funnel -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div>
+                    <div class="chart-title">Status Funnel</div>
+                    <div class="chart-subtitle">Task progression through pipeline stages</div>
+                </div>
+            </div>
+            <div style="display:flex; gap:0; justify-content:center; align-items:stretch; padding:20px 0; flex-wrap:wrap;">
+                <div style="text-align:center; flex:1; max-width:200px; min-width:120px;">
+                    <div style="background:rgba(100,116,139,0.2); border:2px solid rgba(100,116,139,0.4); border-radius:12px; padding:24px 16px; margin:0 6px;">
+                        <div style="font-size:40px; font-weight:800; color:#94a3b8;">64</div>
+                        <div style="font-size:11px; color:#64748b; margin-top:6px; text-transform:uppercase; letter-spacing:1px;">All Tasks</div>
+                    </div>
+                    <div style="font-size:20px; color:#2d3748; margin:8px 0;">→</div>
+                </div>
+                <div style="text-align:center; flex:1; max-width:200px; min-width:120px;">
+                    <div style="background:rgba(59,130,246,0.15); border:2px solid rgba(59,130,246,0.4); border-radius:12px; padding:24px 16px; margin:0 6px;">
+                        <div style="font-size:40px; font-weight:800; color:#60a5fa;">33</div>
+                        <div style="font-size:11px; color:#3b82f6; margin-top:6px; text-transform:uppercase; letter-spacing:1px;">In Progress</div>
+                        <div style="font-size:10px; color:#64748b; margin-top:4px;">51.6%</div>
+                    </div>
+                    <div style="font-size:20px; color:#2d3748; margin:8px 0;">→</div>
+                </div>
+                <div style="text-align:center; flex:1; max-width:200px; min-width:120px;">
+                    <div style="background:rgba(245,158,11,0.15); border:2px solid rgba(245,158,11,0.4); border-radius:12px; padding:24px 16px; margin:0 6px;">
+                        <div style="font-size:40px; font-weight:800; color:#fbbf24;">11</div>
+                        <div style="font-size:11px; color:#f59e0b; margin-top:6px; text-transform:uppercase; letter-spacing:1px;">Not Started</div>
+                        <div style="font-size:10px; color:#64748b; margin-top:4px;">17.2%</div>
+                    </div>
+                    <div style="font-size:20px; color:#2d3748; margin:8px 0;">→</div>
+                </div>
+                <div style="text-align:center; flex:1; max-width:200px; min-width:120px;">
+                    <div style="background:rgba(16,185,129,0.15); border:2px solid rgba(16,185,129,0.4); border-radius:12px; padding:24px 16px; margin:0 6px;">
+                        <div style="font-size:40px; font-weight:800; color:#34d399;">20</div>
+                        <div style="font-size:11px; color:#10b981; margin-top:6px; text-transform:uppercase; letter-spacing:1px;">Completed</div>
+                        <div style="font-size:10px; color:#64748b; margin-top:4px;">31.3%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BUCKETS TAB -->
+<div id="tab-buckets" class="tab-content">
+    <div class="main-content">
+        <div class="bucket-grid">
+            <div class="bucket-card">
+                <div class="bucket-name"><div class="bucket-dot" style="background:#3b82f6;"></div>Warehouse Infrastructure</div>
+                <div class="bucket-stats">
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#34d399;">4</div><div class="bucket-stat-lbl">Done</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#60a5fa;">8</div><div class="bucket-stat-lbl">Active</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#94a3b8;">2</div><div class="bucket-stat-lbl">Pending</div></div>
+                </div>
+                <div class="bucket-progress"><div class="bucket-progress-fill" style="width:29%; background:linear-gradient(90deg,#3b82f6,#1d4ed8);"></div></div>
+                <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:10px; color:#475569;"><span>14 total tasks</span><span>29% complete</span></div>
+            </div>
+            <div class="bucket-card">
+                <div class="bucket-name"><div class="bucket-dot" style="background:#10b981;"></div>Communication & Governance</div>
+                <div class="bucket-stats">
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#34d399;">8</div><div class="bucket-stat-lbl">Done</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#60a5fa;">7</div><div class="bucket-stat-lbl">Active</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#94a3b8;">3</div><div class="bucket-stat-lbl">Pending</div></div>
+                </div>
+                <div class="bucket-progress"><div class="bucket-progress-fill" style="width:44%; background:linear-gradient(90deg,#10b981,#059669);"></div></div>
+                <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:10px; color:#475569;"><span>18 total tasks</span><span>44% complete</span></div>
+            </div>
+            <div class="bucket-card">
+                <div class="bucket-name"><div class="bucket-dot" style="background:#8b5cf6;"></div>Workforce Capability</div>
+                <div class="bucket-stats">
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#34d399;">4</div><div class="bucket-stat-lbl">Done</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#60a5fa;">3</div><div class="bucket-stat-lbl">Active</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#94a3b8;">1</div><div class="bucket-stat-lbl">Pending</div></div>
+                </div>
+                <div class="bucket-progress"><div class="bucket-progress-fill" style="width:50%; background:linear-gradient(90deg,#8b5cf6,#7c3aed);"></div></div>
+                <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:10px; color:#475569;"><span>8 total tasks</span><span>50% complete</span></div>
+            </div>
+            <div class="bucket-card">
+                <div class="bucket-name"><div class="bucket-dot" style="background:#f59e0b;"></div>Inventory & Materials</div>
+                <div class="bucket-stats">
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#34d399;">2</div><div class="bucket-stat-lbl">Done</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#60a5fa;">3</div><div class="bucket-stat-lbl">Active</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#94a3b8;">5</div><div class="bucket-stat-lbl">Pending</div></div>
+                </div>
+                <div class="bucket-progress"><div class="bucket-progress-fill" style="width:20%; background:linear-gradient(90deg,#f59e0b,#d97706);"></div></div>
+                <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:10px; color:#475569;"><span>10 total tasks</span><span>20% complete</span></div>
+            </div>
+            <div class="bucket-card">
+                <div class="bucket-name"><div class="bucket-dot" style="background:#f97316;"></div>Operational Planning</div>
+                <div class="bucket-stats">
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#34d399;">3</div><div class="bucket-stat-lbl">Done</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#60a5fa;">4</div><div class="bucket-stat-lbl">Active</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#94a3b8;">1</div><div class="bucket-stat-lbl">Pending</div></div>
+                </div>
+                <div class="bucket-progress"><div class="bucket-progress-fill" style="width:38%; background:linear-gradient(90deg,#f97316,#ea580c);"></div></div>
+                <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:10px; color:#475569;"><span>8 total tasks</span><span>38% complete</span></div>
+            </div>
+            <div class="bucket-card">
+                <div class="bucket-name"><div class="bucket-dot" style="background:#06b6d4;"></div>Performance Measurement</div>
+                <div class="bucket-stats">
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#34d399;">1</div><div class="bucket-stat-lbl">Done</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#60a5fa;">0</div><div class="bucket-stat-lbl">Active</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#94a3b8;">4</div><div class="bucket-stat-lbl">Pending</div></div>
+                </div>
+                <div class="bucket-progress"><div class="bucket-progress-fill" style="width:20%; background:linear-gradient(90deg,#06b6d4,#0891b2);"></div></div>
+                <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:10px; color:#475569;"><span>5 total tasks</span><span>20% complete</span></div>
+            </div>
+            <div class="bucket-card">
+                <div class="bucket-name"><div class="bucket-dot" style="background:#ec4899;"></div>Stakeholder Engagement</div>
+                <div class="bucket-stats">
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#34d399;">0</div><div class="bucket-stat-lbl">Done</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#60a5fa;">2</div><div class="bucket-stat-lbl">Active</div></div>
+                    <div class="bucket-stat"><div class="bucket-stat-val" style="color:#94a3b8;">2</div><div class="bucket-stat-lbl">Pending</div></div>
+                </div>
+                <div class="bucket-progress"><div class="bucket-progress-fill" style="width:0%; background:linear-gradient(90deg,#ec4899,#db2777);"></div></div>
+                <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:10px; color:#475569;"><span>4 total tasks</span><span>0% complete</span></div>
+            </div>
+        </div>
+
+        <div class="charts-row cols-2">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Bucket Status Comparison</div>
+                        <div class="chart-subtitle">Side-by-side status per bucket</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height:320px;">
+                    <canvas id="bucketStatusCompare"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Priority Distribution by Bucket</div>
+                        <div class="chart-subtitle">Urgent/Important/Medium/Low split</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height:320px;">
+                    <canvas id="bucketPriorityRadar"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TEAM TAB -->
+<div id="tab-team" class="tab-content">
+    <div class="main-content">
+        <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="kpi-card blue">
+                <div class="kpi-label">Steve Valentine</div>
+                <div class="kpi-value" style="font-size:28px;">53</div>
+                <div class="kpi-sub">Tasks assigned</div>
+                <div class="kpi-icon" style="font-size:24px;">👤</div>
+            </div>
+            <div class="kpi-card purple">
+                <div class="kpi-label">Joshua Carceller</div>
+                <div class="kpi-value" style="font-size:28px;">28</div>
+                <div class="kpi-sub">Tasks assigned</div>
+                <div class="kpi-icon" style="font-size:24px;">👤</div>
+            </div>
+            <div class="kpi-card cyan">
+                <div class="kpi-label">Benjamin Chao</div>
+                <div class="kpi-value" style="font-size:28px;">29</div>
+                <div class="kpi-sub">Tasks assigned</div>
+                <div class="kpi-icon" style="font-size:24px;">👤</div>
+            </div>
+            <div class="kpi-card orange">
+                <div class="kpi-label">Jared Thompson</div>
+                <div class="kpi-value" style="font-size:28px;">1</div>
+                <div class="kpi-sub">Tasks assigned</div>
+                <div class="kpi-icon" style="font-size:24px;">👤</div>
+            </div>
+        </div>
+
+        <div class="charts-row cols-2" style="margin-bottom:20px;">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Task Assignments by Team Member</div>
+                        <div class="chart-subtitle">Total tasks per assignee</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height:280px;">
+                    <canvas id="teamAssignment"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Completions by Person</div>
+                        <div class="chart-subtitle">Who completed tasks</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height:280px;">
+                    <canvas id="completedBy"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-row cols-2">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Team Workload Detail</div>
+                        <div class="chart-subtitle">Status breakdown per person</div>
+                    </div>
+                </div>
+                <div class="assignee-list">
+                    <div class="assignee-item">
+                        <div class="assignee-avatar" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8); color:#fff;">SV</div>
+                        <div class="assignee-info">
+                            <div class="assignee-name">Steve Valentine</div>
+                            <div class="assignee-tasks">53 assigned · 19 completed · 25 in progress · 9 not started</div>
+                        </div>
+                        <div class="assignee-bar-wrap">
+                            <div class="assignee-bar"><div class="assignee-bar-fill" style="width:36%; background:#10b981;"></div></div>
+                            <div class="assignee-pct">36% done</div>
+                        </div>
+                    </div>
+                    <div class="assignee-item">
+                        <div class="assignee-avatar" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed); color:#fff;">JC</div>
+                        <div class="assignee-info">
+                            <div class="assignee-name">Joshua Carceller</div>
+                            <div class="assignee-tasks">28 assigned · 9 completed · 16 in progress · 3 not started</div>
+                        </div>
+                        <div class="assignee-bar-wrap">
+                            <div class="assignee-bar"><div class="assignee-bar-fill" style="width:32%; background:#10b981;"></div></div>
+                            <div class="assignee-pct">32% done</div>
+                        </div>
+                    </div>
+                    <div class="assignee-item">
+                        <div class="assignee-avatar" style="background:linear-gradient(135deg,#06b6d4,#0891b2); color:#fff;">BC</div>
+                        <div class="assignee-info">
+                            <div class="assignee-name">Benjamin Chao</div>
+                            <div class="assignee-tasks">29 assigned · 9 completed · 17 in progress · 3 not started</div>
+                        </div>
+                        <div class="assignee-bar-wrap">
+                            <div class="assignee-bar"><div class="assignee-bar-fill" style="width:31%; background:#10b981;"></div></div>
+                            <div class="assignee-pct">31% done</div>
+                        </div>
+                    </div>
+                    <div class="assignee-item">
+                        <div class="assignee-avatar" style="background:linear-gradient(135deg,#f97316,#ea580c); color:#fff;">JT</div>
+                        <div class="assignee-info">
+                            <div class="assignee-name">Jared Thompson</div>
+                            <div class="assignee-tasks">1 assigned · 1 completed · 0 in progress</div>
+                        </div>
+                        <div class="assignee-bar-wrap">
+                            <div class="assignee-bar"><div class="assignee-bar-fill" style="width:100%; background:#10b981;"></div></div>
+                            <div class="assignee-pct">100% done</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Tasks Created By</div>
+                        <div class="chart-subtitle">Task creation ownership</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height:280px;">
+                    <canvas id="createdByChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TIMELINE TAB -->
+<div id="tab-timeline" class="tab-content">
+    <div class="main-content">
+        <div class="charts-row cols-2" style="margin-bottom:20px;">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Tasks Due by Month</div>
+                        <div class="chart-subtitle">Upcoming workload distribution</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height:280px;">
+                    <canvas id="dueDateBar"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Due Date Horizon</div>
+                        <div class="chart-subtitle">Near/mid/long term split</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height:280px;">
+                    <canvas id="horizonDoughnut"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card" style="margin-bottom:20px;">
+            <div class="chart-header">
+                <div>
+                    <div class="chart-title">🚨 Attention Required</div>
+                    <div class="chart-subtitle">Tasks past due or due within 30 days</div>
+                </div>
+                <span class="chart-badge badge-red">Action needed</span>
+            </div>
+            <div class="alert-list">
+                <div class="alert-item overdue">
+                    <div>🔴</div>
+                    <div class="alert-task">
+                        <div class="alert-name">Inbound Freight Notifications</div>
+                        <div class="alert-meta">Communication & Governance · Important · Steve Valentine</div>
+                    </div>
+                    <div class="alert-date">Due 30 May 2026 · OVERDUE</div>
+                </div>
+                <div class="alert-item overdue">
+                    <div>🔴</div>
+                    <div class="alert-task">
+                        <div class="alert-name">Load / Unload Checklist</div>
+                        <div class="alert-meta">Communication & Governance · Medium · Steve Valentine</div>
+                    </div>
+                    <div class="alert-date">Due 30 May 2026 · OVERDUE</div>
+                </div>
+                <div class="alert-item overdue">
+                    <div>🔴</div>
+                    <div class="alert-task">
+                        <div class="alert-name">MC > MLO Position Description</div>
+                        <div class="alert-meta">Communication & Governance · Medium · Steve Valentine</div>
+                    </div>
+                    <div class="alert-date">Due 18 Jun 2026</div>
+                </div>
+                <div class="alert-item due-soon">
+                    <div>🟡</div>
+                    <div class="alert-task">
+                        <div class="alert-name">Green Zone - Helmet Free</div>
+                        <div class="alert-meta">Warehouse Infrastructure · Medium · Team</div>
+                    </div>
+                    <div class="alert-date">Due 30 Jun 2026</div>
+                </div>
+                <div class="alert-item due-soon">
+                    <div>🟡</div>
+                    <div class="alert-task">
+                        <div class="alert-name">Racking / Container Review</div>
+                        <div class="alert-meta">Warehouse Infrastructure · Important · Team</div>
+                    </div>
+                    <div class="alert-date">Due 30 Jun 2026</div>
+                </div>
+                <div class="alert-item due-soon">
+                    <div>🟡</div>
+                    <div class="alert-task">
+                        <div class="alert-name">Returns Process</div>
+                        <div class="alert-meta">Inventory & Materials · Medium · Team</div>
+                    </div>
+                    <div class="alert-date">Due 30 Jun 2026</div>
+                </div>
+                <div class="alert-item due-soon">
+                    <div>🟡</div>
+                    <div class="alert-task">
+                        <div class="alert-name">Org Chart Updates</div>
+                        <div class="alert-meta">Communication & Governance · Urgent · Steve Valentine</div>
+                    </div>
+                    <div class="alert-date">Due 30 Jun 2026</div>
+                </div>
+                <div class="alert-item due-soon">
+                    <div>🟡</div>
+                    <div class="alert-task">
+                        <div class="alert-name">Budget Allocation</div>
+                        <div class="alert-meta">Operational Planning · Important · Steve Valentine</div>
+                    </div>
+                    <div class="alert-date">Due 30 Jun 2026</div>
+                </div>
+                <div class="alert-item upcoming">
+                    <div>🔵</div>
+                    <div class="alert-task">
+                        <div class="alert-name">Warehouse TARP</div>
+                        <div class="alert-meta">Workforce Capability · Important · Steve Valentine</div>
+                    </div>
+                    <div class="alert-date">Due 16 Jul 2026</div>
+                </div>
+                <div class="alert-item upcoming">
+                    <div>🔵</div>
+                    <div class="alert-task">
+                        <div class="alert-name">QM - Repairables</div>
+                        <div class="alert-meta">Inventory & Materials · Medium · Steve Valentine</div>
+                    </div>
+                    <div class="alert-date">Due 31 Jul 2026</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-header">
+                <div>
+                    <div class="chart-title">Completion Velocity</div>
+                    <div class="chart-subtitle">Tasks completed per month — April through May 2026</div>
+                </div>
+            </div>
+            <div class="chart-container" style="height:220px;">
+                <canvas id="velocityChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TASKS LIST TAB -->
+<div id="tab-tasks" class="tab-content">
+    <div class="main-content">
+        <div class="filter-bar">
+            <span class="filter-label">Filters:</span>
+            <select class="filter-select" id="filterStatus" onchange="filterTable()">
+                <option value="">All Status</option>
+                <option value="Completed">Completed</option>
+                <option value="In progress">In Progress</option>
+                <option value="Not started">Not Started</option>
+            </select>
+            <select class="filter-select" id="filterBucket" onchange="filterTable()">
+                <option value="">All Buckets</option>
+                <option value="Warehouse Infrastructure">Warehouse Infrastructure</option>
+                <option value="Communication & Governance">Communication & Governance</option>
+                <option value="Workforce Capability">Workforce Capability</option>
+                <option value="Inventory & Materials">Inventory & Materials</option>
+                <option value="Operational Planning">Operational Planning</option>
+                <option value="Performance Measurement">Performance Measurement</option>
+                <option value="Stakeholder Engagement">Stakeholder Engagement</option>
+            </select>
+            <select class="filter-select" id="filterPriority" onchange="filterTable()">
+                <option value="">All Priority</option>
+                <option value="Urgent">Urgent</option>
+                <option value="Important">Important</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+            <input type="text" class="filter-search" id="filterSearch" placeholder="🔍 Search tasks..." oninput="filterTable()">
+            <select class="filter-select" id="filterLabel" onchange="filterTable()">
+                <option value="">All Labels</option>
+                <option value="Short Term">Short Term</option>
+                <option value="Medium Term">Medium Term</option>
+                <option value="Long Term">Long Term</option>
+                <option value="On Hold">On Hold</option>
+            </select>
+        </div>
+
+        <div class="chart-card" style="padding:0;">
+            <div class="task-table-wrapper">
+                <table class="task-table" id="taskTable">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Bucket</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Label</th>
+                            <th>Due Date</th>
+                            <th>Assigned To</th>
+                            <th>Checklist</th>
+                            <th>Completed</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taskTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===================== DATA =====================
+const tasks = [
+  { name:"W2 Laydown", bucket:"Warehouse Infrastructure", status:"In progress", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2027-06-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"1/7", completed:"", completedBy:"" },
+  { name:"Alternate Stores GAM", bucket:"Warehouse Infrastructure", status:"Not started", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2027-06-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"0/4", completed:"", completedBy:"" },
+  { name:"Racking / Container Review", bucket:"Warehouse Infrastructure", status:"In progress", priority:"Important", label:"Short Term (0-3 Months)", due:"2026-06-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"0/3", completed:"", completedBy:"" },
+  { name:"Bin Location Standardisation", bucket:"Warehouse Infrastructure", status:"In progress", priority:"Important", label:"Short Term (0-3 Months)", due:"2026-06-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"1/1", completed:"", completedBy:"" },
+  { name:"Staging Areas", bucket:"Warehouse Infrastructure", status:"In progress", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-11-17", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"", completedBy:"" },
+  { name:"Segregation of Materials", bucket:"Warehouse Infrastructure", status:"In progress", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-11-16", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Alternate stores BENE", bucket:"Warehouse Infrastructure", status:"Not started", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-11-16", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"", completedBy:"" },
+  { name:"Alternate Stores CSI", bucket:"Warehouse Infrastructure", status:"In progress", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-11-16", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"", completedBy:"" },
+  { name:"Alternate Stores AMG", bucket:"Warehouse Infrastructure", status:"In progress", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-11-16", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Multiple Warehouse / Yards", bucket:"Warehouse Infrastructure", status:"In progress", priority:"Medium", label:"Long Term (1-3Years)", due:"2026-11-16", assigned:"Steve Valentine", checklist:"0/3", completed:"", completedBy:"" },
+  { name:"Ergonomical Review", bucket:"Warehouse Infrastructure", status:"Completed", priority:"Low", label:"Medium Term (3-12 Months)", due:"2026-11-16", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"2026-04-27", completedBy:"Steve Valentine" },
+  { name:"Green Zone - Helmet Free", bucket:"Warehouse Infrastructure", status:"In progress", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-06-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"", completedBy:"" },
+  { name:"Asset Visibility - Serviceability Chart", bucket:"Warehouse Infrastructure", status:"Completed", priority:"Urgent", label:"Short Term (0-3 Months)", due:"2026-06-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"2026-05-24", completedBy:"Steve Valentine" },
+  { name:"Capital FY27", bucket:"Warehouse Infrastructure", status:"Completed", priority:"Urgent", label:"Medium Term (3-12 Months)", due:"2026-11-16", assigned:"Steve Valentine", checklist:"1/1", completed:"2026-04-27", completedBy:"Steve Valentine" },
+  { name:"Returns Process", bucket:"Inventory & Materials", status:"In progress", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-06-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"", completedBy:"" },
+  { name:"DC Labelling", bucket:"Inventory & Materials", status:"In progress", priority:"Important", label:"Short Term (0-3 Months)", due:"2026-06-30", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"QM Reporting", bucket:"Inventory & Materials", status:"In progress", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-06-30", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Expediting Improvement", bucket:"Inventory & Materials", status:"Not started", priority:"Important", label:"Medium Term (3-12 Months)", due:"2026-11-16", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"AI Integration", bucket:"Inventory & Materials", status:"Not started", priority:"Low", label:"Medium Term (3-12 Months)", due:"2026-10-12", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Standard ERP", bucket:"Inventory & Materials", status:"Not started", priority:"Low", label:"Long Term (1-3Years)", due:"2026-12-31", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"QM - Repairables", bucket:"Inventory & Materials", status:"Not started", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-07-31", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Chem Alert", bucket:"Inventory & Materials", status:"Completed", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-05-31", assigned:"Steve Valentine", checklist:"2/3", completed:"2026-05-24", completedBy:"Benjamin Chao" },
+  { name:"Inbound Freight Notifications", bucket:"Communication & Governance", status:"Not started", priority:"Important", label:"Medium Term (3-12 Months)", due:"2026-05-30", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"PSI / RTW", bucket:"Communication & Governance", status:"Completed", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-04-16", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"2026-04-06", completedBy:"Steve Valentine" },
+  { name:"Handovers", bucket:"Communication & Governance", status:"Completed", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-05-11", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"2026-04-15", completedBy:"Steve Valentine" },
+  { name:"SupT Collaboration Session", bucket:"Communication & Governance", status:"Not started", priority:"Low", label:"Medium Term (3-12 Months)", due:"2026-12-31", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Org Chart Updates", bucket:"Communication & Governance", status:"In progress", priority:"Urgent", label:"Short Term (0-3 Months)", due:"2026-06-30", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"DOA Workflows", bucket:"Communication & Governance", status:"Completed", priority:"Urgent", label:"Short Term (0-3 Months)", due:"2026-04-09", assigned:"Steve Valentine", checklist:"", completed:"2026-04-06", completedBy:"Steve Valentine" },
+  { name:"Safeday Reporting", bucket:"Communication & Governance", status:"In progress", priority:"Low", label:"Short Term (0-3 Months)", due:"2026-06-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"2/2", completed:"", completedBy:"" },
+  { name:"INX Reporting", bucket:"Communication & Governance", status:"Completed", priority:"Low", label:"Short Term (0-3 Months)", due:"2026-04-30", assigned:"Steve Valentine", checklist:"", completed:"2026-04-14", completedBy:"Steve Valentine" },
+  { name:"Working Alone Procedure", bucket:"Communication & Governance", status:"In progress", priority:"Urgent", label:"Medium Term (3-12 Months)", due:"2026-06-04", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"", completedBy:"" },
+  { name:"Load / Unload Checklist", bucket:"Communication & Governance", status:"In progress", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-05-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"", completedBy:"" },
+  { name:"Establish RACI - Fixed Plant", bucket:"Communication & Governance", status:"In progress", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-07-31", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"", completedBy:"" },
+  { name:"Expediting", bucket:"Communication & Governance", status:"Not started", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-12-31", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Backfreight Visibility", bucket:"Communication & Governance", status:"Not started", priority:"Important", label:"Medium Term (3-12 Months)", due:"2026-06-30", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Freight Cut Off Times", bucket:"Communication & Governance", status:"Completed", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-05-08", assigned:"Steve Valentine", checklist:"", completed:"2026-05-24", completedBy:"Steve Valentine" },
+  { name:"MC > MLO Position Description", bucket:"Communication & Governance", status:"In progress", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-06-18", assigned:"Steve Valentine", checklist:"0/2", completed:"", completedBy:"" },
+  { name:"Single Point Of Contacts", bucket:"Communication & Governance", status:"Completed", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-05-20", assigned:"Steve Valentine", checklist:"", completed:"2026-05-24", completedBy:"Steve Valentine" },
+  { name:"Freight Rate Card Visibility", bucket:"Communication & Governance", status:"Completed", priority:"Important", label:"Short Term (0-3 Months)", due:"2026-05-08", assigned:"Steve Valentine", checklist:"", completed:"2026-05-24", completedBy:"Steve Valentine" },
+  { name:"Warehouse Access", bucket:"Communication & Governance", status:"Completed", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-05-31", assigned:"Steve Valentine", checklist:"", completed:"2026-05-24", completedBy:"Steve Valentine" },
+  { name:"Capability Mapping", bucket:"Workforce Capability", status:"In progress", priority:"Important", label:"Medium Term (3-12 Months)", due:"2026-06-01", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Talent Management", bucket:"Workforce Capability", status:"Completed", priority:"Important", label:"Medium Term (3-12 Months)", due:"2026-06-01", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"2026-05-24", completedBy:"Steve Valentine" },
+  { name:"Individual Performance Goals", bucket:"Workforce Capability", status:"In progress", priority:"Important", label:"Medium Term (3-12 Months)", due:"2026-06-01", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Pay Scale Structure", bucket:"Workforce Capability", status:"Completed", priority:"Medium", label:"Long Term (1-3Years)", due:"2026-06-30", assigned:"Steve Valentine", checklist:"", completed:"2026-05-24", completedBy:"Steve Valentine" },
+  { name:"Diversity Targets", bucket:"Workforce Capability", status:"Not started", priority:"Low", label:"On Hold", due:"2026-12-31", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Warehouse TARP", bucket:"Workforce Capability", status:"In progress", priority:"Important", label:"Medium Term (3-12 Months)", due:"2026-07-16", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Survey Results", bucket:"Workforce Capability", status:"Completed", priority:"Urgent", label:"Short Term (0-3 Months)", due:"2026-05-14", assigned:"Steve Valentine;Jared Thompson;Joshua Carceller;Benjamin Chao", checklist:"", completed:"2026-05-24", completedBy:"Steve Valentine" },
+  { name:"Standardise Fly Out Day", bucket:"Workforce Capability", status:"Completed", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-04-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"2026-04-22", completedBy:"Steve Valentine" },
+  { name:"Superintendent Dashboard", bucket:"Performance Measurement", status:"Not started", priority:"Low", label:"Long Term (1-3Years)", due:"2026-11-30", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Warehouse KPI's", bucket:"Performance Measurement", status:"Not started", priority:"Important", label:"Medium Term (3-12 Months)", due:"2026-12-30", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Decarb Targets", bucket:"Performance Measurement", status:"Not started", priority:"Low", label:"On Hold", due:"2027-01-30", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Project Tracking", bucket:"Performance Measurement", status:"Completed", priority:"Important", label:"Short Term (0-3 Months)", due:"2027-03-31", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"2026-04-15", completedBy:"Steve Valentine" },
+  { name:"Parts Availability", bucket:"Performance Measurement", status:"Not started", priority:"Medium", label:"Long Term (1-3Years)", due:"2027-01-31", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Task Allocation", bucket:"Operational Planning", status:"Completed", priority:"Important", label:"Short Term (0-3 Months)", due:"2026-05-29", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"2026-05-24", completedBy:"Steve Valentine" },
+  { name:"WH Project Planner - Education", bucket:"Operational Planning", status:"In progress", priority:"Medium", label:"Short Term (0-3 Months)", due:"2027-06-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"6/16", completed:"", completedBy:"" },
+  { name:"Airfreight Optimisation", bucket:"Operational Planning", status:"In progress", priority:"Important", label:"Medium Term (3-12 Months)", due:"2026-05-31", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"2/5", completed:"", completedBy:"" },
+  { name:"Diesel Holdings", bucket:"Operational Planning", status:"Completed", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-06-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"2026-04-28", completedBy:"Steve Valentine" },
+  { name:"Process Standardisation", bucket:"Operational Planning", status:"In progress", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-09-30", assigned:"Steve Valentine", checklist:"1/6", completed:"", completedBy:"" },
+  { name:"Budget Allocation", bucket:"Operational Planning", status:"In progress", priority:"Important", label:"Short Term (0-3 Months)", due:"2026-06-30", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"F2F WH Collab Meetings", bucket:"Operational Planning", status:"Completed", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-05-31", assigned:"Steve Valentine", checklist:"2/2", completed:"2026-05-24", completedBy:"Steve Valentine" },
+  { name:"Capital Register FY28", bucket:"Warehouse Infrastructure", status:"In progress", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2027-02-28", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"0/1", completed:"", completedBy:"" },
+  { name:"Warehouse Access AMG", bucket:"Warehouse Infrastructure", status:"Completed", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-05-31", assigned:"Steve Valentine", checklist:"4/4", completed:"2026-05-14", completedBy:"Steve Valentine" },
+  { name:"Service Level Agreements", bucket:"Stakeholder Engagement", status:"Not started", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-12-31", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Daily Delivery Service", bucket:"Stakeholder Engagement", status:"Not started", priority:"Medium", label:"Long Term (1-3Years)", due:"2027-03-31", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+  { name:"Maintenance Meetings", bucket:"Stakeholder Engagement", status:"In progress", priority:"Medium", label:"Medium Term (3-12 Months)", due:"2026-09-30", assigned:"Steve Valentine;Joshua Carceller;Benjamin Chao", checklist:"", completed:"", completedBy:"" },
+  { name:"Parts Availability Awareness", bucket:"Stakeholder Engagement", status:"In progress", priority:"Medium", label:"Short Term (0-3 Months)", due:"2026-09-30", assigned:"Steve Valentine", checklist:"", completed:"", completedBy:"" },
+];
+
+// ===================== CHART DEFAULTS =====================
+Chart.defaults.color = '#64748b';
+Chart.defaults.borderColor = '#2d3748';
+Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+
+const bucketColors = {
+  "Warehouse Infrastructure": "#3b82f6",
+  "Communication & Governance": "#10b981",
+  "Workforce Capability": "#8b5cf6",
+  "Inventory & Materials": "#f59e0b",
+  "Operational Planning": "#f97316",
+  "Performance Measurement": "#06b6d4",
+  "Stakeholder Engagement": "#ec4899"
+};
+
+// ===================== TAB SWITCHING =====================
+function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    const tabs = ['overview','status','buckets','team','timeline','tasks'];
+    document.querySelectorAll('.nav-tab')[tabs.indexOf(tab)].classList.add('active');
+}
+
+// ===================== CHART INIT =====================
+function initCharts() {
+
+    // Status Doughnut
+    new Chart(document.getElementById('statusDoughnut'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Completed', 'In Progress', 'Not Started'],
+            datasets: [{
+                data: [20, 33, 11],
+                backgroundColor: ['#10b981','#3b82f6','#475569'],
+                borderColor: ['#059669','#1d4ed8','#334155'],
+                borderWidth: 2,
+                hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle', font: { size: 12 } } },
+                tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} tasks (${((ctx.raw/64)*100).toFixed(1)}%)` } }
+            },
+            cutout: '65%'
+        }
+    });
+
+    // Bucket Bar
+    const bucketNames = Object.keys(bucketColors);
+    const bucketCounts = bucketNames.map(b => tasks.filter(t => t.bucket === b).length);
+    new Chart(document.getElementById('bucketBar'), {
+        type: 'bar',
+        data: {
+            labels: bucketNames.map(b => b.length > 20 ? b.substring(0,20)+'…' : b),
+            datasets: [{
+                label: 'Tasks',
+                data: bucketCounts,
+                backgroundColor: Object.values(bucketColors).map(c => c + '33'),
+                borderColor: Object.values(bucketColors),
+                borderWidth: 2,
+                borderRadius: 6,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: '#1e2433' }, ticks: { stepSize: 2 } },
+                y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+            }
+        }
+    });
+
+    // Priority Bar
+    new Chart(document.getElementById('priorityBar'), {
+        type: 'bar',
+        data: {
+            labels: ['Urgent', 'Important', 'Medium', 'Low'],
+            datasets: [{
+                label: 'Tasks',
+                data: [7, 19, 30, 8],
+                backgroundColor: ['rgba(239,68,68,0.3)','rgba(245,158,11,0.3)','rgba(59,130,246,0.3)','rgba(100,116,139,0.3)'],
+                borderColor: ['#ef4444','#f59e0b','#3b82f6','#64748b'],
+                borderWidth: 2, borderRadius: 6, borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: '#1e2433' }, beginAtZero: true },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // Label Pie
+    new Chart(document.getElementById('labelPie'), {
+        type: 'pie',
+        data: {
+            labels: ['Short Term (0-3M)', 'Medium Term (3-12M)', 'Long Term (1-3Y)', 'On Hold'],
+            datasets: [{
+                data: [25, 26, 9, 2],
+                backgroundColor: ['rgba(16,185,129,0.7)','rgba(245,158,11,0.7)','rgba(139,92,246,0.7)','rgba(100,116,139,0.7)'],
+                borderColor: ['#059669','#d97706','#7c3aed','#475569'],
+                borderWidth: 2, hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { padding: 14, usePointStyle: true, pointStyle: 'circle', font: { size: 11 } } } }
+        }
+    });
+
+    // Creation Line
+    new Chart(document.getElementById('creationLine'), {
+        type: 'line',
+        data: {
+            labels: ['Jul 2025', 'Oct 2025', 'Mar 2026', 'Apr 2026 (1)', 'Apr 2026 (2)', 'May 2026'],
+            datasets: [{
+                label: 'Tasks Created (Cumulative)',
+                data: [1, 2, 45, 54, 59, 64],
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59,130,246,0.1)',
+                borderWidth: 2.5, fill: true, tension: 0.4,
+                pointBackgroundColor: '#3b82f6', pointRadius: 5, pointHoverRadius: 7
+            },{
+                label: 'Tasks Completed (Cumulative)',
+                data: [0, 0, 0, 4, 6, 20],
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16,185,129,0.1)',
+                borderWidth: 2.5, fill: true, tension: 0.4,
+                pointBackgroundColor: '#10b981', pointRadius: 5, pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { labels: { usePointStyle: true, pointStyle: 'circle' } } },
+            scales: {
+                y: { grid: { color: '#1e2433' }, beginAtZero: true },
+                x: { grid: { color: '#1e2433' } }
+            }
+        }
+    });
+
+    // Status by Bucket Stacked
+    new Chart(document.getElementById('statusByBucketStacked'), {
+        type: 'bar',
+        data: {
+            labels: ['WH Infra', 'Comm & Gov', 'Workforce', 'Inventory', 'Op Plan', 'Perf Meas', 'Stakeholder'],
+            datasets: [
+                { label: 'Completed', data: [4,8,4,2,3,1,0], backgroundColor: 'rgba(16,185,129,0.8)', borderRadius: 3 },
+                { label: 'In Progress', data: [8,7,3,3,4,0,2], backgroundColor: 'rgba(59,130,246,0.8)', borderRadius: 3 },
+                { label: 'Not Started', data: [2,3,1,5,1,4,2], backgroundColor: 'rgba(100,116,139,0.5)', borderRadius: 3 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { labels: { usePointStyle: true, pointStyle: 'circle', font: {size:11} } } },
+            scales: {
+                x: { stacked: true, grid: { display: false }, ticks: { font: {size:10} } },
+                y: { stacked: true, grid: { color: '#1e2433' } }
+            }
+        }
+    });
+
+    // Priority vs Status Grouped
+    new Chart(document.getElementById('priorityStatusGrouped'), {
+        type: 'bar',
+        data: {
+            labels: ['Urgent', 'Important', 'Medium', 'Low'],
+            datasets: [
+                { label: 'Completed', data: [2,6,10,2], backgroundColor: 'rgba(16,185,129,0.8)', borderRadius: 4 },
+                { label: 'In Progress', data: [4,10,17,2], backgroundColor: 'rgba(59,130,246,0.8)', borderRadius: 4 },
+                { label: 'Not Started', data: [1,3,3,4], backgroundColor: 'rgba(100,116,139,0.5)', borderRadius: 4 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { labels: { usePointStyle: true, pointStyle: 'circle', font:{size:11} } } },
+            scales: {
+                x: { grid: { display: false } },
+                y: { grid: { color: '#1e2433' }, beginAtZero: true }
+            }
+        }
+    });
+
+    // Completion Trend
+    new Chart(document.getElementById('completionTrend'), {
+        type: 'bar',
+        data: {
+            labels: ['Apr 6', 'Apr 14', 'Apr 15', 'Apr 22', 'Apr 27', 'Apr 28', 'May 14', 'May 24'],
+            datasets: [{
+                label: 'Tasks Completed',
+                data: [2, 1, 2, 1, 2, 1, 2, 9],
+                backgroundColor: 'rgba(16,185,129,0.7)',
+                borderColor: '#10b981', borderWidth: 2, borderRadius: 6, borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: '#1e2433' }, beginAtZero: true },
+                x: { grid: { display: false }, ticks: { font: {size:10} } }
+            }
+        }
+    });
+
+    // Checklist chart
+    const checklistTasks = tasks.filter(t => t.checklist && t.checklist.includes('/'));
+    const clLabels = checklistTasks.map(t => t.name.length > 25 ? t.name.substring(0,25)+'…' : t.name);
+    const clDone = checklistTasks.map(t => parseInt(t.checklist.split('/')[0]));
+    const clTotal = checklistTasks.map(t => parseInt(t.checklist.split('/')[1]));
+    const clRemaining = clTotal.map((tot, i) => tot - clDone[i]);
+
+    new Chart(document.getElementById('checklistChart'), {
+        type: 'bar',
+        data: {
+            labels: clLabels,
+            datasets: [
+                { label: 'Completed Items', data: clDone, backgroundColor: 'rgba(16,185,129,0.8)', borderRadius: 4 },
+                { label: 'Remaining', data: clRemaining, backgroundColor: 'rgba(59,130,246,0.3)', borderRadius: 4 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+            plugins: { legend: { labels: { usePointStyle: true, pointStyle: 'circle', font:{size:11} } } },
+            scales: {
+                x: { stacked: true, grid: { color: '#1e2433' } },
+                y: { stacked: true, grid: { display: false }, ticks: { font: {size:9} } }
+            }
+        }
+    });
+
+    // Open task age
+    new Chart(document.getElementById('openTaskAge'), {
+        type: 'bar',
+        data: {
+            labels: ['< 30 days', '30-60 days', '60-90 days', '90+ days'],
+            datasets: [{
+                label: 'Open Tasks',
+                data: [8, 15, 10, 11],
+                backgroundColor: ['rgba(16,185,129,0.7)','rgba(245,158,11,0.7)','rgba(239,68,68,0.5)','rgba(239,68,68,0.8)'],
+                borderColor: ['#10b981','#f59e0b','#ef4444','#dc2626'],
+                borderWidth: 2, borderRadius: 6, borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: '#1e2433' }, beginAtZero: true },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // Bucket Status Compare
+    new Chart(document.getElementById('bucketStatusCompare'), {
+        type: 'bar',
+        data: {
+            labels: ['WH Infra', 'Comm & Gov', 'Workforce', 'Inventory', 'Op Plan', 'Perf Meas', 'Stakeholder'],
+            datasets: [
+                { label: '% Completed', data: [29,44,50,20,38,20,0], backgroundColor: 'rgba(16,185,129,0.8)', borderRadius:4 },
+                { label: '% In Progress', data: [57,39,38,30,50,0,50], backgroundColor: 'rgba(59,130,246,0.7)', borderRadius:4 },
+                { label: '% Not Started', data: [14,17,12,50,12,80,50], backgroundColor: 'rgba(100,116,139,0.5)', borderRadius:4 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { labels: { usePointStyle: true, pointStyle:'circle', font:{size:11} } } },
+            scales: {
+                x: { grid: { display: false }, ticks: { font:{size:10} } },
+                y: { grid: { color:'#1e2433' }, beginAtZero: true, max: 100, ticks: { callback: v => v+'%' } }
+            }
+        }
+    });
+
+    // Bucket Priority Radar
+    new Chart(document.getElementById('bucketPriorityRadar'), {
+        type: 'radar',
+        data: {
+            labels: ['Urgent', 'Important', 'Medium', 'Low'],
+            datasets: [
+                { label: 'WH Infrastructure', data: [2,3,8,1], borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.1)', pointBackgroundColor:'#3b82f6' },
+                { label: 'Comm & Governance', data: [3,3,9,3], borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.1)', pointBackgroundColor:'#10b981' },
+                { label: 'Workforce Cap.', data: [1,4,2,1], borderColor:'#8b5cf6', backgroundColor:'rgba(139,92,246,0.1)', pointBackgroundColor:'#8b5cf6' },
+                { label: 'Inventory & Mat.', data: [0,3,5,3], borderColor:'#f59e0b', backgroundColor:'rgba(245,158,11,0.1)', pointBackgroundColor:'#f59e0b' }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: {
+                r: {
+                    grid: { color: '#2d3748' }, angleLines: { color: '#2d3748' },
+                    pointLabels: { font: { size: 11 }, color: '#94a3b8' },
+                    ticks: { backdropColor: 'transparent', color: '#475569' }
+                }
+            },
+            plugins: { legend: { labels: { font:{size:10}, usePointStyle:true, pointStyle:'circle' } } }
+        }
+    });
+
+    // Team Assignment
+    new Chart(document.getElementById('teamAssignment'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Steve Valentine', 'Joshua Carceller', 'Benjamin Chao', 'Jared Thompson'],
+            datasets: [{
+                data: [53, 28, 29, 1],
+                backgroundColor: ['rgba(59,130,246,0.8)','rgba(139,92,246,0.8)','rgba(6,182,212,0.8)','rgba(249,115,22,0.8)'],
+                borderColor: ['#1d4ed8','#7c3aed','#0891b2','#ea580c'],
+                borderWidth: 2, hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { padding:14, usePointStyle:true, pointStyle:'circle', font:{size:11} } } },
+            cutout: '55%'
+        }
+    });
+
+    // Completed By
+    new Chart(document.getElementById('completedBy'), {
+        type: 'bar',
+        data: {
+            labels: ['Steve Valentine', 'Benjamin Chao'],
+            datasets: [{
+                label: 'Tasks Completed',
+                data: [19, 1],
+                backgroundColor: ['rgba(16,185,129,0.8)','rgba(6,182,212,0.8)'],
+                borderColor: ['#059669','#0891b2'],
+                borderWidth: 2, borderRadius: 8, borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color:'#1e2433' }, beginAtZero: true },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // Created By
+    new Chart(document.getElementById('createdByChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Steve Valentine', 'Benjamin Chao'],
+            datasets: [{
+                data: [60, 4],
+                backgroundColor: ['rgba(59,130,246,0.8)','rgba(6,182,212,0.8)'],
+                borderColor: ['#1d4ed8','#0891b2'],
+                borderWidth: 2, hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { position:'bottom', labels:{padding:14, usePointStyle:true, pointStyle:'circle', font:{size:12}} } }
+        }
+    });
+
+    // Due Date by Month
+    new Chart(document.getElementById('dueDateBar'), {
+        type: 'bar',
+        data: {
+            labels: ['May 26', 'Jun 26', 'Jul 26', 'Aug 26', 'Sep 26', 'Oct 26', 'Nov 26', 'Dec 26', 'Jan 27+'],
+            datasets: [{
+                label: 'Tasks Due',
+                data: [5, 20, 4, 0, 4, 1, 7, 5, 8],
+                backgroundColor: ['rgba(239,68,68,0.8)','rgba(245,158,11,0.7)','rgba(59,130,246,0.7)','rgba(59,130,246,0.6)','rgba(59,130,246,0.6)','rgba(59,130,246,0.5)','rgba(59,130,246,0.5)','rgba(139,92,246,0.5)','rgba(139,92,246,0.4)'],
+                borderColor: ['#ef4444','#f59e0b','#3b82f6','#3b82f6','#3b82f6','#3b82f6','#3b82f6','#8b5cf6','#8b5cf6'],
+                borderWidth: 2, borderRadius: 6, borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color:'#1e2433' }, beginAtZero: true },
+                x: { grid: { display: false }, ticks:{font:{size:10}} }
+            }
+        }
+    });
+
+    // Horizon Doughnut
+    new Chart(document.getElementById('horizonDoughnut'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Short Term (0-3M)', 'Medium Term (3-12M)', 'Long Term (1-3Y)', 'On Hold'],
+            datasets: [{
+                data: [25, 26, 9, 2],
+                backgroundColor: ['rgba(16,185,129,0.8)','rgba(245,158,11,0.8)','rgba(139,92,246,0.8)','rgba(100,116,139,0.6)'],
+                borderColor: ['#059669','#d97706','#7c3aed','#475569'],
+                borderWidth: 2, hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { position:'bottom', labels:{padding:14,usePointStyle:true,pointStyle:'circle',font:{size:11}} } },
+            cutout: '60%'
+        }
+    });
+
+    // Velocity Chart
+    new Chart(document.getElementById('velocityChart'), {
+        type: 'line',
+        data: {
+            labels: ['Apr 6', 'Apr 14', 'Apr 15', 'Apr 22', 'Apr 27', 'Apr 28', 'May 14', 'May 24'],
+            datasets: [{
+                label: 'Completions per day',
+                data: [2, 1, 2, 1, 2, 1, 2, 9],
+                borderColor: '#f59e0b',
+                backgroundColor: 'rgba(245,158,11,0.1)',
+                borderWidth: 2.5, fill: true, tension: 0.4,
+                pointBackgroundColor: '#f59e0b', pointRadius: 5, pointHoverRadius: 7
+            },{
+                label: 'Cumulative',
+                data: [2, 3, 5, 6, 8, 9, 11, 20],
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16,185,129,0.05)',
+                borderWidth: 2, fill: false, tension: 0.4,
+                pointBackgroundColor: '#10b981', pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { labels: { usePointStyle:true, pointStyle:'circle' } } },
+            scales: {
+                y: { grid: { color:'#1e2433' }, beginAtZero: true },
+                x: { grid: { color:'#1e2433' } }
+            }
+        }
+    });
+}
+
+// ===================== TABLE =====================
+function getStatusClass(s) {
     if (s === 'Completed') return 'status-completed';
     if (s === 'In progress') return 'status-in-progress';
     return 'status-not-started';
