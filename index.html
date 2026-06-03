@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+    if (s === 'Completed') return 'status-completed';
+    if (s === 'In progress') return 'status-in-progress';
+    return 'status-not-started';
+}
+function getDotClass(s) {
+    if (s === 'Completed') return 'dot-completed';
+    if (s === 'In progress') return 'dot-in-progress';
+    return 'dot-not-started';
+}
+function getPriorityClass(p) {
+    const m = { 'Urgent':'p-urgent','Important':'p-important','Medium':'p-medium','Low':'p-low' };
+    return m[p] || 'p-medium';
+}
+function getLabelClass(l) {
+    if (l.includes('Short')) return 'l-short';
+    if (l.includes('Medium')) return 'l-medium';
+    if (l.includes('Long')) return 'l-long';
+    return 'l-hold';
+}
+function getChecklistHtml(cl) {
+    if (!cl || !cl.includes('/')) return '<span style="color:#475569;font-size:10px;">—</span>';
+    const [done, total] = cl.split('/').map(Number);
+    const pct = total > 0 ? Math.round((done/total)*100) : 0;
+    return `<div class="checklist-progress">
+        <div class="checklist-bar"><div class="checklist-fill" style="width:${pct}%;"></div></div>
+        <span class="checklist-text">${cl}</span>
+    </div>`;
+}
+
+function renderTable(data) {
+    const tbody = document.getElementById('taskTableBody');
+    tbody.innerHTML = data.map(t => `
+        <tr>
+            <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:600; color:#e2e8f0;">${t.name}</td>
+            <td style="white-space:nowrap;"><span style="color:${bucketColors[t.bucket] || '#94a3b8'}; font-size:11px; font-weight:600;">● </span><span style="font-size:11px;">${t.bucket}</span></td>
+            <td><span class="status-pill ${getStatusClass(t.status)}"><span class="status-dot ${getDotClass(t.status)}"></span>${t.status}</span></td>
+            <td><span class="priority-pill ${getPriorityClass(t.priority)}">${t.priority}</span></td>
+            <td><span class="label-pill ${getLabelClass(t.label)}">${t.label.replace(' (0-3 Months)','').replace(' (3-12 Months)','').replace(' (1-3Years)','')}</span></td>
+            <td style="font-size:11px; color:#64748b; white-space:nowrap;">${t.due || '—'}</td>
+            <td style="font-size:10px; color:#64748b; max-width:150px;">${t.assigned.split(';').map(a => `<span style="display:inline-block; background:rgba(255,255,255,0.05); border:1px solid #2d3748; border-radius:4px; padding:1px 5px; margin:1px; font-size:9px;">${a.trim().split(' ')[0]}</span>`).join('')}</td>
+            <td>${getChecklistHtml(t.checklist)}</td>
+            <td style="font-size:10px; color:#64748b; white-space:nowrap;">${t.completed ? `<span style="color:#34d399;">✓ ${t.completed}</span>` : '—'}</td>
+        </tr>
+    `).join('');
+}
+
+function filterTable() {
+    const status = document.getElementById('filterStatus').value;
+    const bucket = document.getElementById('filterBucket').value;
+    const priority = document.getElementById('filterPriority').value;
+    const search = document.getElementById('filterSearch').value.toLowerCase();
+    const label = document.getElementById('filterLabel').value;
+
+    const filtered = tasks.filter(t => {
+        if (status && t.status !== status) return false;
+        if (bucket && t.bucket !== bucket) return false;
+        if (priority && t.priority !== priority) return false;
+        if (search && !t.name.toLowerCase().includes(search) && !t.bucket.toLowerCase().includes(search)) return false;
+        if (label && !t.label.includes(label)) return false;
+        return true;
+    });
+    renderTable(filtered);
+}
+
+// ===================== INIT =====================
+document.addEventListener('DOMContentLoaded', () => {
+    initCharts();
+    renderTable(tasks);
+});
+</script>
+
+</body>
+</html>
