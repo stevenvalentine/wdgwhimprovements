@@ -1,67 +1,123 @@
-Task Name,Bucket,Status,Priority,Assigned To,Created By,Created Date,Due date,Start date,Is Recurring,Late,Completed Date,Completed By,Completed Checklist Items,Labels,Notes
-W2 Laydown,Warehouse Infrastructure,In progress,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Benjamin Chao,2025-07-04,2027-06-30,2025-07-04,,false,,,1/7,Medium Term (3-12 Months),Yard locations to have signage
-Alternate Stores GAM,Warehouse Infrastructure,Not started,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Benjamin Chao,2025-10-25,2027-06-30,2026-04-01,,false,,,0/4,Medium Term (3-12 Months),Utilisation concerns
-Racking / Container Review,Warehouse Infrastructure,In progress,Important,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-06-30,2026-03-19,,false,,,0/3,Short Term (0-3 Months),Conduct racking audit
-Bin Location Standardisation,Warehouse Infrastructure,In progress,Important,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-06-30,2026-03-19,,false,,,1/1,Short Term (0-3 Months),Review bin naming convention
-Staging Areas,Warehouse Infrastructure,In progress,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-11-17,2026-03-19,,false,,,,Medium Term (3-12 Months),Define dedicated zones
-Segregation of Materials,Warehouse Infrastructure,In progress,Medium,Steve Valentine,Steve Valentine,2026-03-31,2026-11-16,2026-03-19,,false,,,,Medium Term (3-12 Months),Identify non-stock materials
-Alternate stores BENE,Warehouse Infrastructure,Not started,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-11-16,2026-03-19,,false,,,,Medium Term (3-12 Months),Utilisation review
-Alternate Stores CSI,Warehouse Infrastructure,In progress,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-11-16,2026-03-19,,false,,,,Medium Term (3-12 Months),Understand ownership
-Alternate Stores AMG,Warehouse Infrastructure,In progress,Medium,Steve Valentine,Steve Valentine,2026-03-31,2026-11-16,2026-03-19,,false,,,,Medium Term (3-12 Months),Utilisation review
-Multiple Warehouse / Yards,Warehouse Infrastructure,In progress,Medium,Steve Valentine,Steve Valentine,2026-03-31,2026-11-16,2026-03-19,,false,,,0/3,Long Term (1-3Years),Centralised storage
-Ergonomical Review,Warehouse Infrastructure,Completed,Low,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-11-16,2026-03-19,,false,2026-04-27,Steve Valentine,,Medium Term (3-12 Months),Desk and seating review
-Green Zone - Helmet Free,Warehouse Infrastructure,In progress,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-06-30,2026-03-19,,false,,,,Short Term (0-3 Months),Heat stress concern
-Asset Visibility - Serviceability Chart,Warehouse Infrastructure,Completed,Urgent,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-06-30,2026-03-19,,false,2026-05-24,Steve Valentine,,Short Term (0-3 Months),Forklift serviceability
-Capital FY27,Warehouse Infrastructure,Completed,Urgent,Steve Valentine,Steve Valentine,2026-03-31,2026-11-16,2026-03-19,,false,2026-04-27,Steve Valentine,1/1,Medium Term (3-12 Months),Review FY27 Capital
-Returns Process,Inventory & Materials,In progress,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-06-30,2026-03-19,,false,,,,Short Term (0-3 Months),Review and train
-DC Labelling,Inventory & Materials,In progress,Important,Steve Valentine,Steve Valentine,2026-03-31,2026-06-30,2026-03-19,,false,,,,Short Term (0-3 Months),Mandatory Coupa reference
-QM Reporting,Inventory & Materials,In progress,Medium,Steve Valentine,Steve Valentine,2026-03-31,2026-06-30,2026-03-19,,false,,,,Medium Term (3-12 Months),Standardise quality codes
-Expediting Improvement,Inventory & Materials,Not started,Important,Steve Valentine,Steve Valentine,2026-03-31,2026-11-16,2026-03-19,,false,,,,Medium Term (3-12 Months),Improve visibility
-AI Integration,Inventory & Materials,Not started,Low,Steve Valentine,Steve Valentine,2026-03-31,2026-10-12,2026-03-19,,false,,,,Medium Term (3-12 Months),Self-service bot
-Standard ERP,Inventory & Materials,Not started,Low,Steve Valentine,Steve Valentine,2026-03-31,2026-12-31,2026-03-19,,false,,,,Long Term (1-3Years),FTL Coupa Pronto
-QM - Repairables,Inventory & Materials,Not started,Medium,Steve Valentine,Steve Valentine,2026-05-07,2026-07-31,2026-05-07,,false,,,,Short Term (0-3 Months),Outstanding KPIs
-Chem Alert,Inventory & Materials,Completed,Medium,Steve Valentine,Steve Valentine,2026-05-14,2026-05-31,2026-05-14,,false,2026-05-24,Benjamin Chao,2/3,Short Term (0-3 Months),
-Inbound Freight Notifications,Communication & Governance,Not started,Important,Steve Valentine,Steve Valentine,2026-03-31,2026-05-30,2026-03-19,,false,,,,Medium Term (3-12 Months),Daily notification
-PSI / RTW,Communication & Governance,Completed,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-04-16,2026-03-19,,false,2026-04-06,Steve Valentine,,Short Term (0-3 Months),Review layout
-Handovers,Communication & Governance,Completed,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-05-11,2026-03-19,,false,2026-04-15,Steve Valentine,,Short Term (0-3 Months),Standardise templates
-SupT Collaboration Session,Communication & Governance,Not started,Low,Steve Valentine,Steve Valentine,2026-03-31,2026-12-31,2026-03-19,,false,,,,Medium Term (3-12 Months),Cross-site sessions
-Org Chart Updates,Communication & Governance,In progress,Urgent,Steve Valentine,Steve Valentine,2026-03-31,2026-06-30,2026-03-19,,false,,,,Short Term (0-3 Months),Update reporting lines
-DOA Workflows,Communication & Governance,Completed,Urgent,Steve Valentine,Steve Valentine,2026-03-31,2026-04-09,2026-03-19,,false,2026-04-06,Steve Valentine,,Short Term (0-3 Months),Review delegation
-Safeday Reporting,Communication & Governance,In progress,Low,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-06-30,2026-03-19,,false,,,2/2,Short Term (0-3 Months),Safe Day expectations
-INX Reporting,Communication & Governance,Completed,Low,Steve Valentine,Steve Valentine,2026-03-31,2026-04-30,2026-03-19,,false,2026-04-14,Steve Valentine,,Short Term (0-3 Months),Training required
-Working Alone Procedure,Communication & Governance,In progress,Urgent,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-06-04,2026-03-19,,false,,,,Medium Term (3-12 Months),Bene Stores procedure
-Load / Unload Checklist,Communication & Governance,In progress,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-05-30,2026-03-19,,false,,,,Medium Term (3-12 Months),Standardised checklist
-Establish RACI - Fixed Plant,Communication & Governance,In progress,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-07-31,2026-03-19,,false,,,,Medium Term (3-12 Months),Process flow RACI
-Expediting,Communication & Governance,Not started,Medium,Steve Valentine,Steve Valentine,2026-03-31,2026-12-31,2026-03-19,,false,,,,Medium Term (3-12 Months),Replenishment POs
-Backfreight Visibility,Communication & Governance,Not started,Important,Steve Valentine,Steve Valentine,2026-03-31,2026-06-30,2026-03-19,,false,,,,Medium Term (3-12 Months),Dashboard visibility
-Freight Cut Off Times,Communication & Governance,Completed,Medium,Steve Valentine,Steve Valentine,2026-04-15,2026-05-08,2026-03-30,,false,2026-05-24,Steve Valentine,,Short Term (0-3 Months),Freight guide
-MC > MLO Position Description,Communication & Governance,In progress,Medium,Steve Valentine,Steve Valentine,2026-04-28,2026-06-18,2026-03-31,,false,,,0/2,Short Term (0-3 Months),Create MLO PD
-Single Point Of Contacts,Communication & Governance,Completed,Medium,Steve Valentine,Steve Valentine,2026-04-28,2026-05-20,2026-04-20,,false,2026-05-24,Steve Valentine,,Short Term (0-3 Months),General email setup
-Freight Rate Card Visibility,Communication & Governance,Completed,Important,Steve Valentine,Steve Valentine,2026-04-28,2026-05-08,2026-04-27,,false,2026-05-24,Steve Valentine,,Short Term (0-3 Months),Identify freight rates
-Warehouse Access,Communication & Governance,Completed,Medium,Steve Valentine,Steve Valentine,2026-05-12,2026-05-31,2026-05-01,,false,2026-05-24,Steve Valentine,,Short Term (0-3 Months),Restrict access signage
-Capability Mapping,Workforce Capability,In progress,Important,Steve Valentine,Steve Valentine,2026-03-31,2026-06-01,2026-03-19,,false,,,,Medium Term (3-12 Months),Skills assessment
-Talent Management,Workforce Capability,Completed,Important,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-06-01,2026-03-19,,false,2026-05-24,Steve Valentine,,Medium Term (3-12 Months),Development plans
-Individual Performance Goals,Workforce Capability,In progress,Important,Steve Valentine,Steve Valentine,2026-03-31,2026-06-01,2026-03-19,,false,,,,Medium Term (3-12 Months),Align KPIs
-Pay Scale Structure,Workforce Capability,Completed,Medium,Steve Valentine,Steve Valentine,2026-03-31,2026-06-30,2026-03-19,,false,2026-05-24,Steve Valentine,,Long Term (1-3Years),Review pay bands
-Diversity Targets,Workforce Capability,Not started,Low,Steve Valentine,Steve Valentine,2026-03-31,2026-12-31,2026-03-19,,false,,,,On Hold,Set measurable targets
-Warehouse TARP,Workforce Capability,In progress,Important,Steve Valentine,Steve Valentine,2026-03-31,2026-07-16,2026-03-19,,false,,,,Medium Term (3-12 Months),Trigger action plan
-Survey Results,Workforce Capability,Completed,Urgent,Steve Valentine;Jared Thompson;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-05-14,2026-03-19,,false,2026-05-24,Steve Valentine,,Short Term (0-3 Months),Review heat map
-Standardise Fly Out Day,Workforce Capability,Completed,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-04-21,2026-04-30,2026-04-20,,false,2026-04-22,Steve Valentine,,Short Term (0-3 Months),Remove local agreement
-Superintendent Dashboard,Performance Measurement,Not started,Low,Steve Valentine,Steve Valentine,2026-03-31,2026-11-30,2026-03-19,,false,,,,Long Term (1-3Years),Real-time dashboard
-Warehouse KPI's,Performance Measurement,Not started,Important,Steve Valentine,Steve Valentine,2026-03-31,2026-12-30,2026-03-19,,false,,,,Medium Term (3-12 Months),Define KPIs
-Decarb Targets,Performance Measurement,Not started,Low,Steve Valentine,Steve Valentine,2026-03-31,2027-01-30,2026-03-19,,false,,,,On Hold,Baseline emissions
-Project Tracking,Performance Measurement,Completed,Important,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2027-03-31,2026-03-19,,false,2026-04-15,Steve Valentine,,Short Term (0-3 Months),Central tracker
-Parts Availability,Performance Measurement,Not started,Medium,Steve Valentine,Steve Valentine,2026-03-31,2027-01-31,2026-03-19,,false,,,,Long Term (1-3Years),Critical parts reporting
-Task Allocation,Operational Planning,Completed,Important,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-05-29,2026-03-19,,false,2026-05-24,Steve Valentine,,Short Term (0-3 Months),Daily labour planning
-WH Project Planner - Education,Operational Planning,In progress,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2027-06-30,2026-03-19,,false,,,6/16,Short Term (0-3 Months),Training required
-Airfreight Optimisation,Operational Planning,In progress,Important,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-05-31,2026-03-19,,false,,,2/5,Medium Term (3-12 Months),Analyse airfreight
-Diesel Holdings,Operational Planning,Completed,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-04-02,2026-06-30,2026-04-02,,false,2026-04-28,Steve Valentine,,Medium Term (3-12 Months),Increase site capacity
-Process Standardisation,Operational Planning,In progress,Medium,Steve Valentine,Steve Valentine,2026-04-06,2026-09-30,2026-04-06,,false,,,1/6,Medium Term (3-12 Months),Overarching standardisation
-Budget Allocation,Operational Planning,In progress,Important,Steve Valentine,Steve Valentine,2026-04-28,2026-06-30,2026-04-01,,false,,,,Short Term (0-3 Months),Budget proposal
-F2F WH Collab Meetings,Operational Planning,Completed,Medium,Steve Valentine,Steve Valentine,2026-05-13,2026-05-31,2026-05-13,,false,2026-05-24,Steve Valentine,2/2,Short Term (0-3 Months),Weekly safety pause
-Capital Register FY28,Warehouse Infrastructure,In progress,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-04-27,2027-02-28,2026-05-01,,false,,,0/1,Medium Term (3-12 Months),FY28 Capital Requests
-Warehouse Access AMG,Warehouse Infrastructure,Completed,Medium,Steve Valentine,Steve Valentine,2026-05-14,2026-05-31,2026-05-01,,false,2026-05-14,Steve Valentine,4/4,Short Term (0-3 Months),
-Service Level Agreements,Stakeholder Engagement,Not started,Medium,Steve Valentine,Steve Valentine,2026-03-31,2026-12-31,2026-03-19,,false,,,,Medium Term (3-12 Months),Formalise SLAs
-Daily Delivery Service,Stakeholder Engagement,Not started,Medium,Steve Valentine,Steve Valentine,2026-03-31,2027-03-31,2026-03-19,,false,,,,Long Term (1-3Years),Review schedules
-Maintenance Meetings,Stakeholder Engagement,In progress,Medium,Steve Valentine;Joshua Carceller;Benjamin Chao,Steve Valentine,2026-03-31,2026-09-30,2026-03-19,,false,,,,Medium Term (3-12 Months),Regular meetings
-Parts Availability Awareness,Stakeholder Engagement,In progress,Medium,Steve Valentine,Steve Valentine,2026-03-31,2026-09-30,2026-03-19,,false,,,,Short Term (0-3 Months),Joint expediting forums
+Task Name	Bucket	Goal	Status	Priority	Assigned To	Created By	Created Date	Due date	Start date	Is Recurring	Late	Completed Date	Completed By	Completed Checklist Items	Checklist Items	Labels	Notes
+QM - Repairables	Inventory & Materials		Not started	Medium	Steve Valentine	Steve Valentine	2026-05-07	2026-07-31	2026-05-07		false					Short Term (0-3 Months)	Gain understanding of outstanding KPI's  - closing out open PO, see email from Jared / Craig
+Budget Allocation	Operational Planning		In progress	Important	Steve Valentine	Steve Valentine	2026-04-28	2026-06-30	2026-04-01		false					Short Term (0-3 Months)	"Create Budget Proposal for Warehouse
+Currently fall under AMG - Transitioning to Fixed Plant, need to identify where costs sit, approval process and potential for ownership change"
+MC > MLO Position Description	Communication & Governance		In progress	Medium	Steve Valentine	Steve Valentine	2026-04-28	2026-06-18	2026-03-31		false			2/2	Planned Maintenance to be included JT;Add Core Returns / Rotables to role JT	Short Term (0-3 Months)	"Create MLO Position Description (Ex MC)
+Work on Banding Structure with people Services"
+Capital Register FY28 	Warehouse Infrastructure		In progress	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-04-27	2027-02-28	2026-05-01		false			0/1	Relocation GAM Warehouse to W2	Medium Term (3-12 Months)	Task created to capture FY28 Capital Requests
+Process Standardisation	Operational Planning		In progress	Medium	Steve Valentine	Steve Valentine	2026-04-06	2026-09-30	2026-04-06		false			1/6	MLO / MC Roles and Responsibilities;Cyclic Counts - Bene / AMG / CSI;TBF Process - AMG / Fixed Plant / Processing / Other;Picking / Packing / Delivering Processing;Introduce Shipped from DC status;Picking / Packing / Delivering AMG	Medium Term (3-12 Months)	"Overarching task to list areas that require standardisation
+Separate tasks will be created from this checklist
+Add any ideas / options that we want to review"
+Airfreight Optimisation	Operational Planning		In progress	Important	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false			2/5	Publish with Doc Approvals;Confirm Zebra printer arrived at MRA WDG;Meet SupV at MRA WDG;Share wtih Stakeholders;Create  Draft Procedure	Medium Term (3-12 Months)	Analyse airfreight usage, define approval thresholds, SLA pickup's / deliveries
+Parts Availability Awareness 	Stakeholder Engagement		In progress	Medium	Steve Valentine	Steve Valentine	2026-03-31	2026-09-30	2026-03-19		false					Short Term (0-3 Months)	Establish joint expediting forums with procurement, logistics, and operations to resolve critical supply constraints - weekly/shut based stakeholders
+Maintenance Meetings	Stakeholder Engagement		In progress	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-09-30	2026-03-19		false					Medium Term (3-12 Months)	Hold regular meetings with maintenance teams to review upcoming work, critical parts, and performance issues.
+Daily Delivery Service	Stakeholder Engagement		Not started	Medium	Steve Valentine	Steve Valentine	2026-03-31	2027-03-31	2026-03-19		false					Long Term (1-3Years)	Review delivery schedules, optimise routes, and confirm daily cut-off times to improve service reliability.
+Service Level Agreements	Stakeholder Engagement		Not started	Medium	Steve Valentine	Steve Valentine	2026-03-31	2026-12-31	2026-03-19		false					Medium Term (3-12 Months)	Define and formalise SLAs with key stakeholders covering service expectations, escalation paths, and performance measures.
+WH Project Planner - Education	Operational Planning		In progress	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2027-06-30	2026-03-19		false			6/16	Emmanuel Agyare ;Justin Peters;Steve Gilbert;Dean Nortman;Dylan Strang;Ben Chao;Carissa Tipene;Aaron hamilton;Scott McKimmie;Kenn Enanno;Josh Carceller ;Steve Valentine;Kea Kingi;Jon Boden  ;Malcolm Coyle;Agus Puta	Short Term (0-3 Months)	Training required for the team members to ensure good utilisation of there WH Planner - checklist added for team members who have received 1:1 sessions
+Parts Availability	Performance Measurement		Not started	Medium	Steve Valentine	Steve Valentine	2026-03-31	2027-01-31	2026-03-19		false					Long Term (1-3Years)	Improve reporting on critical parts availability, backorders, and shortages to support maintenance planning.
+Decarb Targets	Performance Measurement		Not started	Low	Steve Valentine	Steve Valentine	2026-03-31	2027-01-30	2026-03-19		false					On Hold	Establish baseline emissions data, set reduction targets, and track initiatives such as energy efficiency and freight optimisation.
+Warehouse KPI's	Performance Measurement		Not started	Important	Steve Valentine	Steve Valentine	2026-03-31	2026-12-30	2026-03-19		false					Medium Term (3-12 Months)	Define a standard set of warehouse KPIs (Inventory accuracy, productivity, safety) and review performance monthly.
+Superintendent Dashboard	Performance Measurement		Not started	Low	Steve Valentine	Steve Valentine	2026-03-31	2026-11-30	2026-03-19		false					Long Term (1-3Years)	Develop a real-time dashboard consolidating safety,  service, and inventory metrics for superintendent-level visibility.
+Backfreight Visibility	Communication & Governance		Not started	Important	Steve Valentine	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false					Medium Term (3-12 Months)	Maintenance teams unable to view back freight receivals at destination - Create process flow / RACI - Dashboard for visibility
+Expediting	Communication & Governance		Not started	Medium	Steve Valentine	Steve Valentine	2026-03-31	2026-12-31	2026-03-19		false					Medium Term (3-12 Months)	Replenishment PO's Processing Maintenance concerned "Weir" critical items
+Establish RACI - Fixed Plant / AMG Standardisation	Communication & Governance		In progress	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-07-31	2026-03-19		false					Medium Term (3-12 Months)	Establish process flow / RACI - share with Processing Maintenance and others (alignment opportunity)
+Load / Unload Checklist	Communication & Governance		In progress	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-09-30	2026-03-19		false					Medium Term (3-12 Months)	Introduce a standardised load/unload checklist covering inbound / outbound trailer load / unload, damage checks, and system confirmations; audit compliance supervisor signoff.
+Working Alone Procedure	Communication & Governance		In progress	Urgent	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false					Medium Term (3-12 Months)	Review / Develop Working Alone Procedure - Bene Stores / Remote Yards
+Safeday Reporting	Communication & Governance		In progress	Low	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false			2/2	Create new team ;Check reporting - data not syncing correctly	Short Term (0-3 Months)	Reinforce Safe Day expectations, Make visible during PS , Review relatable incidents and near misses weekly RTW.
+Org Chart Updates	Communication & Governance		In progress	Urgent	Steve Valentine	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false					Short Term (0-3 Months)	Update current organisational charts with clear reporting lines and publish updates following any change.
+SupT Collaboration Session	Communication & Governance		Not started	Low	Steve Valentine	Steve Valentine	2026-03-31	2026-12-31	2026-03-19		false					Medium Term (3-12 Months)	Schedule regular cross-site collaboration sessions to share best practice, risks, and improvement initiatives.
+Warehouse TARP	Workforce Capability		In progress	Important	Steve Valentine	Steve Valentine	2026-03-31	2026-07-16	2026-03-19		false					Medium Term (3-12 Months)	Develop and communicate a Trigger Action Response Plan for workforce risks, including absenteeism, fatigue, and skills shortages.
+Diversity Targets	Workforce Capability		Not started	Low	Steve Valentine	Steve Valentine	2026-03-31	2026-12-31	2026-03-19		false					On Hold	Set measurable diversity and inclusion targets, track recruitment and promotion metrics, and embed inclusive hiring practices.
+Individual Performance Goals	Workforce Capability		In progress	Important	Steve Valentine	Steve Valentine	2026-03-31	2026-07-31	2026-03-19		false					Medium Term (3-12 Months)	Align individual KPIs to warehouse and business objectives, embed into performance reviews, and track quarterly progress.
+Capability Mapping	Workforce Capability		In progress	Important	Steve Valentine	Steve Valentine	2026-03-31	2026-07-31	2026-03-19		false					Medium Term (3-12 Months)	Assess current workforce skills against role requirements, identify gaps, and develop targeted training and succession plans.
+Standard ERP	Inventory & Materials		Not started	Low	Steve Valentine	Steve Valentine	2026-03-31	2026-12-31	2026-03-19		false					Long Term (1-3Years)	FTL, Coupa, Pronto, Bustle utilised in stores - time consuming lack of linked capabilities
+AI Integration	Inventory & Materials		Not started	Low	Steve Valentine	Steve Valentine	2026-03-31	2026-10-12	2026-03-19		false					Medium Term (3-12 Months)	Deploy a self-service bot integrated with Cupa/Bustle to provide real-time status updates on parts location, delivery, and ETA.
+Expediting Improvement	Inventory & Materials		Not started	Important	Steve Valentine	Steve Valentine	2026-03-31	2026-11-16	2026-03-19		false					Medium Term (3-12 Months)	improve visibility of expedite requests, align maintenance, procurement and logistics on response times.
+QM Reporting	Inventory & Materials		In progress	Medium	Steve Valentine	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false					Medium Term (3-12 Months)	Standardise quality reason codes, improve data capture at point of inspection, and review QM reports monthly to identify systemic issues.
+DC Labelling	Inventory & Materials		In progress	Important	Steve Valentine	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false					Short Term (0-3 Months)	Enforce mandatory Coupa reference capture at receipting at DC and introduce standard labels with barcodes linked to PO and material master data.
+Returns Process	Inventory & Materials		In progress	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false					Short Term (0-3 Months)	Review, share, train and roll out
+Green Zone - Helmet Free	Warehouse Infrastructure		In progress	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false					Short Term (0-3 Months)	Obvious heat stress when wearing helmet in Admin Area of Warehouse
+Multiple Warehouse / Yards	Warehouse Infrastructure		In progress	Medium	Steve Valentine	Steve Valentine	2026-03-31	2026-11-16	2026-03-19		false			0/3	Reloc GAM to W2?;Additional domes on site?;Obtain Quotes for new / reloc TBG	Long Term (1-3Years)	Implement centralised storage facility compete with break down only counter service and  customer delivery schedule
+Alternate Stores AMG	Warehouse Infrastructure		In progress	Medium	Steve Valentine	Steve Valentine	2026-03-31	2026-11-16	2026-03-19		false					Medium Term (3-12 Months)	Utilisation slow/fast moving materials - Leadership visibility, Shut laydowns, Fencing opportunities
+Alternate Stores CSI	Warehouse Infrastructure		In progress	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-11-16	2026-03-19		false					Medium Term (3-12 Months)	Understand ownership - accountability
+Alternate stores BENE	Warehouse Infrastructure		Not started	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-11-16	2026-03-19		false					Medium Term (3-12 Months)	Utilisation slow/fast moving materials - Leadership visibility, Shut laydowns, Fencing opportunities
+Segregation of Materials	Warehouse Infrastructure		In progress	Medium	Steve Valentine	Steve Valentine	2026-03-31	2026-11-16	2026-03-19		false					Medium Term (3-12 Months)	"Identify
+  Non-Stock Materials in Warehouse - relocate to identfied area"
+Staging Areas	Warehouse Infrastructure		In progress	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-11-17	2026-03-19		false					Medium Term (3-12 Months)	"Define
+  dedicated inbound, outbound, quarantine and staging zones with clear signage,
+  floor markings, and capacity limits."
+Bin Location Standardisation	Warehouse Infrastructure		In progress	Important	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false			1/1	Transfer task to WH Planner to monitor progress	Short Term (0-3 Months)	"Review /
+  Develop and rollout a standard bin naming convention across all Warehouses
+  Wodgina, update WMS master data, and retrain staff on new location logic."
+Racking / Container Review	Warehouse Infrastructure		In progress	Important	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false			0/3	Relocate PPE/Consumables from containers to Racking;Relocate LV asset work order materials to containers;Relocate Holding units - improve racking storage	Short Term (0-3 Months)	"Conduct
+  racking audit, obtain quote for redesign racking layout to suit SKU profiles,
+  improve vertical utilisation carry out staged implementation to minimise
+  disruption."
+Alternate Stores GAM	Warehouse Infrastructure		Not started	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Benjamin Chao	2025-10-25	2027-06-30	2026-04-01		false			0/4	Count verification;Smalls consolidated in one area;Large consolidated in one area;Stock lines tagged correctly with WH owner and catalogue number.	Medium Term (3-12 Months)	Utilisation, Layout, Ownership - Currently under utilised, security concerns, accessibility constraints
+W2 Laydown	Warehouse Infrastructure		In progress	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Benjamin Chao	2025-07-04	2027-06-30	2025-07-04		false			1/7	Signage YRD02AA, BB etc.;Cycle Locations as you go.;Coupa SOH loc's updated YRD02;Coupa SOH loc's updated YRD01;Signage YRD01AA, BB etc.;Signage YRD03AA , BB etc.;Coupa SOH loc's updated YRD03	Medium Term (3-12 Months)	"Yard locations to have signage and Coupa SOH updated to reflect changes.
+This will help assist with our future cycle counts and inventory management.
+Location mapping attached.
+Additional order of permanent signage will follow - use laminated A3 initially.
+Utilisation, Layout, Ownership - Currently under utilised"
+Inbound Freight Notifications	Communication & Governance		Completed	Important	Steve Valentine	Steve Valentine	2026-03-31	2026-05-30	2026-03-19		false	2026-06-08	Steve Valentine			Medium Term (3-12 Months)	Implement daily notitication of all inbound freight - standardardise template, data and D/L
+Pay Scale Structure	Workforce Capability		Completed	Medium	Steve Valentine	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false	2026-05-24	Steve Valentine			Long Term (1-3Years)	Review current pay bands against market benchmarks, ensure internal equity, and document clear progression criteria.
+Asset Visibility - Serviceability Chart	Warehouse Infrastructure		Completed	Urgent	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-06-30	2026-03-19		false	2026-05-24	Steve Valentine			Short Term (0-3 Months)	"Obtain lease data, serviceability register Forklift and LV
+Build visual chart for Fork serviceability across Warehouses"
+Talent Management	Workforce Capability		Completed	Important	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-06-01	2026-03-19		false	2026-05-24	Steve Valentine			Medium Term (3-12 Months)	Introduce structured development plans, mentoring, and internal mobility pathways to retain and grow high-potential staff.
+F2F WH Collab Meetings	Operational Planning		Completed	Medium	Steve Valentine	Steve Valentine	2026-05-13	2026-05-31	2026-05-13		false	2026-05-24	Steve Valentine	2/2	Create Weeekly session to review WH Planner with the team;Introduce Weekly Safety Pause	Short Term (0-3 Months)	"Weekly Safety Pause Agenda:
+Weekly Safety Pause for all Warehouse Personnel
+This is an in person meeting
+Bene Stores personnel dial in required
+Incident & Near Miss Review
+Review Banner notices - discuss any near misses or incidents from the previous week
+""What could have been done differently?""
+Lessons learned from incidents in other departments/sites
+Hazard Identification
+New or changing hazards in the work environment
+Seasonal hazards (wet floors, heat stress, reduced visibility etc.)
+Equipment or machinery concerns raised by team members
+PPE & Equipment Checks
+Correct use and condition of PPE
+Reporting damaged or missing equipment
+Safeday Warehouse inspection reminders
+Team Wellbeing & Fatigue
+Fatigue management awareness
+Mental health check-in
+Reporting culture - encouraging staff to speak up
+Housekeeping & Workplace Conditions
+Current state of work areas
+Slip, trip and fall hazards
+Storage and material handling reminders
+Recognition
+Acknowledge team members who raised safety concerns
+Celebrate good catches and positive safety behaviours
+Procurement
+List any materials that are needed to be purchased in relation to keeping the team safe"
+Warehouse Access	Communication & Governance		Completed	Medium	Steve Valentine	Steve Valentine	2026-05-12	2026-05-31	2026-05-01		false	2026-05-24	Steve Valentine			Short Term (0-3 Months)	"Require signage to restrict access to Warehouse Personnel only
+Require Signage that clearly shows entry exit points and muster points (TMP)"
+Task Allocation	Operational Planning		Completed	Important	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-05-29	2026-03-19		false	2026-05-24	Steve Valentine			Short Term (0-3 Months)	Introduce daily labour planning based on workload forecasts and skill requirements to balance productivity and safety Use digital and visual boards in prestart meetings to communicate daily priorities, risks and dependencies.
+Single Point Of Contacts - Warehousing	Communication & Governance		Completed	Medium	Steve Valentine	Steve Valentine	2026-04-28	2026-05-20	2026-04-20		false	2026-05-24	Steve Valentine			Short Term (0-3 Months)	"Set up single source contact points for
+General Warehousing Email / Phone
+Supervisor's - Email / Phone
+Email will require category standardisation for b2b review upon incoming shifts"
+Survey Results	Workforce Capability		Completed	Urgent	Steve Valentine;Jared Thompson;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-05-14	2026-03-19		false	2026-05-24	Steve Valentine			Short Term (0-3 Months)	"Review Heat Map, Responses and Commentary
+Shared with Olivia for Review prior to Roll Out"
+Freight Rate Card Visibility	Communication & Governance		Completed	Important	Steve Valentine	Steve Valentine	2026-04-28	2026-05-08	2026-04-27		false	2026-05-24	Steve Valentine			Short Term (0-3 Months)	"Identify Freight rates for General - Toll Overnight - Hotshots etc
+Share with maintenance for cost savings opportunities"
+Freight Cut Off Times	Communication & Governance		Completed	Medium	Steve Valentine	Steve Valentine	2026-04-15	2026-05-08	2026-03-30		false	2026-05-24	Steve Valentine			Short Term (0-3 Months)	Create Freight Cut Off Times guide to share with maintenance personnel to gain better understanding on DC processing capabilities, freight arrival and processing times
+Chem Alert	Inventory & Materials		Completed	Medium	Steve Valentine	Steve Valentine	2026-05-14	2026-05-31	2026-05-14		false	2026-05-24	Benjamin Chao	2/3	Add Materials in BENE Stores to Register;Provide Log in to all team members - Refresher;Add BENE Stores to Register	Short Term (0-3 Months)	
+Warehouse Access AMG	Warehouse Infrastructure		Completed	Medium	Steve Valentine	Steve Valentine	2026-05-14	2026-05-31	2026-05-01		false	2026-05-14	Steve Valentine	4/4	Apply signage to entry / exits;Introduce sign in / sign out sheet at front counter;Create Memo on restricting access;share memo with SupT group	Short Term (0-3 Months)	
+Diesel Holdings	Operational Planning		Completed	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-04-02	2026-06-30	2026-04-02		false	2026-04-28	Steve Valentine			Medium Term (3-12 Months)	Contact categories - look to increase site capacity / minimum holdings
+Ergonomical Review 	Warehouse Infrastructure		Completed	Low	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-11-16	2026-03-19		false	2026-04-27	Steve Valentine			Medium Term (3-12 Months)	Warehouse Staff desks and seating situation requires review
+Capital FY27	Warehouse Infrastructure		Completed	Urgent	Steve Valentine	Steve Valentine	2026-03-31	2026-11-16	2026-03-19		false	2026-04-27	Steve Valentine	1/1	FY28 Checklist	Medium Term (3-12 Months)	Review FY27 Capital - Update in Anaplan
+Standardise Fly Out Day	Workforce Capability		Completed	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-04-21	2026-04-30	2026-04-20		false	2026-04-22	Steve Valentine			Short Term (0-3 Months)	"Removal of local agreement where team members fly out on TUES PM flights when working 14 consecutive days
+Nightshift component applied for 7d7n7r rostered personnel"
+Handover S26	Communication & Governance		Completed	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-05-11	2026-03-19		false	2026-04-15	Steve Valentine			Short Term (0-3 Months)	Standardise handover templates covering safety, workload, issues, and priorities; audit handover quality regularly. 26 compliance
+Project Tracking 	Performance Measurement		Completed	Important	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2027-03-31	2026-03-19		false	2026-04-15	Steve Valentine			Short Term (0-3 Months)	Implement a central project tracker with milestones, owners, and RAG status, reviewed weekly.
+INX Reporting	Communication & Governance		Completed	Low	Steve Valentine	Steve Valentine	2026-03-31	2026-04-30	2026-03-19		false	2026-04-14	Steve Valentine			Short Term (0-3 Months)	"SV - training required on INX/Safe day
+Where do actions / Incidents live
+Ownership / Accountability
+Reporting
+Close Out Time frames"
+PSI / RTW 	Communication & Governance		Completed	Medium	Steve Valentine;Joshua Carceller;Benjamin Chao	Steve Valentine	2026-03-31	2026-04-16	2026-03-19		false	2026-04-06	Steve Valentine			Short Term (0-3 Months)	Review layout, structure, Value add, stretches (music)
+DOA Workflows	Communication & Governance		Completed	Urgent	Steve Valentine	Steve Valentine	2026-03-31	2026-04-09	2026-03-19		false	2026-04-06	Steve Valentine			Short Term (0-3 Months)	Review and document Delegation of Authority workflows to ensure timely approvals and compliance with governance standards.
